@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Projekt
 {
@@ -13,11 +14,9 @@ namespace Projekt
         public Dvojisko_drevo(T podatek = default(T), Dvojisko_drevo<T> levo = null, Dvojisko_drevo<T> desno = null)
         {
             _podatek = podatek;
-            _levoPoddrevo = levo;
-            _desnoPoddrevo = desno;
-            _prazno = false;
-            if (podatek == null && levo == null && desno == null)
-                _prazno = true;
+            _levoPoddrevo = levo ?? new Dvojisko_drevo<T>();
+            _desnoPoddrevo = desno ?? new Dvojisko_drevo<T>();
+            _prazno = podatek == null && levo == null && desno == null;
         }
 
         // Lastnost za pridobivanje in nastavljanje podatka v korenu
@@ -60,6 +59,58 @@ namespace Projekt
             if (!Desno.Prazno && Desno.Iskanje(vrednost))
                 return true;
             return false;
+        }
+
+        // Metoda za sestavljanje drevesa
+        public static Dvojisko_drevo<T> Sestavi(T podatekVKorenu, Dvojisko_drevo<T> levoDrevo, Dvojisko_drevo<T> desnoDrevo)
+        {
+            return new Dvojisko_drevo<T>(podatekVKorenu, levoDrevo, desnoDrevo);
+        }
+
+        // Metoda za obhod drevesa
+        public static string Obhod(Dvojisko_drevo<T> drevo, string vzorec)
+        {
+            if (drevo.Prazno)
+                return "";
+
+            StringBuilder vrni = new StringBuilder();
+            foreach (char znak in vzorec)
+            {
+                if (znak == 'l')
+                    vrni.Append(Obhod(drevo.Levo, vzorec));
+                else if (znak == 'd')
+                    vrni.Append(Obhod(drevo.Desno, vzorec));
+                else if (znak == 'k')
+                    vrni.Append(drevo.Podatek.ToString()).Append(",");
+                else
+                    throw new Exception($"Napačen znak v obhodu ({znak}). Dovoljeni znaki so 'd', 'k' in 'l'.");
+            }
+            return vrni.ToString();
+        }
+
+        // Metoda za sestavljanje drevesa iz tabele
+        public static Dvojisko_drevo<T> SestaviIzTabele(T[] tabela, int polozajKorena = 1)
+        {
+            if (polozajKorena >= tabela.Length || tabela[polozajKorena] == null)
+                return new Dvojisko_drevo<T>();
+
+            Dvojisko_drevo<T> levo = SestaviIzTabele(tabela, 2 * polozajKorena);
+            Dvojisko_drevo<T> desno = SestaviIzTabele(tabela, 2 * polozajKorena + 1);
+            return Sestavi(tabela[polozajKorena], levo, desno);
+        }
+
+        // Metoda za pretvorbo drevesa v niz
+        public override string ToString()
+        {
+            try
+            {
+                string izpis = Obhod(this, "lkd");
+                return "[" + izpis.TrimEnd(',') + "]";
+            }
+            catch (Exception)
+            {
+                return "Interna napaka";
+            }
         }
     }
 }
