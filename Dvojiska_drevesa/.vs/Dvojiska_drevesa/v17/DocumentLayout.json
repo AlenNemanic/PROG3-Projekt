@@ -1,18 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\",
+  "WorkspaceRootPath": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|c:\\users\\alen\\onedrive - univerza v ljubljani\\desktop\\fmf\\3. letnik\\prog3\\prog3-projekt\\dvojiska_drevesa\\projekt\\dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|c:\\users\\jakob\\source\\repos\\prog3-projekt\\dvojiska_drevesa\\projekt\\dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\projekt\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\projekt\\iskalno_dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\iskalno_dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\projekt\\iskalno_dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\iskalno_dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\projekt\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,11 +34,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Iskalno_dvojisko_drevo.cs",
-              "DocumentMoniker": "C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Iskalno_dvojisko_drevo.cs",
+              "DocumentMoniker": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Iskalno_dvojisko_drevo.cs",
               "RelativeDocumentMoniker": "Projekt\\Iskalno_dvojisko_drevo.cs",
-              "ToolTip": "C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Iskalno_dvojisko_drevo.cs",
+              "ToolTip": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Iskalno_dvojisko_drevo.cs",
               "RelativeToolTip": "Projekt\\Iskalno_dvojisko_drevo.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -49,22 +49,22 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Dvojisko_drevo.cs",
-              "DocumentMoniker": "C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Dvojisko_drevo.cs",
+              "DocumentMoniker": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Dvojisko_drevo.cs",
               "RelativeDocumentMoniker": "Projekt\\Dvojisko_drevo.cs",
-              "ToolTip": "C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Dvojisko_drevo.cs",
+              "ToolTip": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Dvojisko_drevo.cs",
               "RelativeToolTip": "Projekt\\Dvojisko_drevo.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAJAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAA+AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T19:29:59.775Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.cs",
               "RelativeDocumentMoniker": "Projekt\\Form1.cs",
-              "ToolTip": "C:\\Users\\ALEN\\OneDrive - Univerza v Ljubljani\\Desktop\\FMF\\3. Letnik\\PROG3\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.cs [Design]",
+              "ToolTip": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.cs [Design]",
               "RelativeToolTip": "Projekt\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T19:29:53.817Z",
