@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Projekt
@@ -91,7 +92,7 @@ namespace Projekt
         // Metoda za sestavljanje drevesa iz tabele
         public static Dvojisko_drevo<T> SestaviIzTabele(T[] tabela, int polozajKorena = 1)
         {
-            if (polozajKorena >= tabela.Length || tabela[polozajKorena] == null)
+            if (polozajKorena >= tabela.Length || EqualityComparer<T>.Default.Equals(tabela[polozajKorena], default(T)))
                 return new Dvojisko_drevo<T>();
 
             Dvojisko_drevo<T> levo = SestaviIzTabele(tabela, 2 * polozajKorena);
