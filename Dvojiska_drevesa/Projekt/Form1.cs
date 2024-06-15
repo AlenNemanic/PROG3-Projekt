@@ -18,6 +18,7 @@ namespace Projekt
         {
             InitializeComponent();
             InitializeTree();
+            InitializeTreePositions(); // Set initial positions
             this.Resize += Form1_Resize;
             this.MouseDown += Form1_MouseDown;
             this.MouseMove += Form1_MouseMove;
@@ -30,8 +31,7 @@ namespace Projekt
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            // Recalculate positions of the tree nodes when the form is resized
-            SetInitialPositions(tree, this.ClientSize.Width / 2, 20, this.ClientSize.Width / 4, 30);
+            InitializeTreePositions(); // Recalculate positions of the tree nodes when the form is resized
             this.Invalidate();
         }
 
@@ -46,7 +46,12 @@ namespace Projekt
             tree.Desno.Levo = new Dvojisko_drevo<int>(12);
             tree.Desno.Desno = new Dvojisko_drevo<int>(18);
 
-            SetInitialPositions(tree, this.ClientSize.Width / 2, 20, this.ClientSize.Width / 4, 30);
+            InitializeTreePositions(); // Set initial positions
+        }
+
+        private void InitializeTreePositions()
+        {
+            SetInitialPositions(tree, this.ClientSize.Width / 2, 20, this.ClientSize.Width / 4, this.ClientSize.Height / 4);
         }
 
         private void SetInitialPositions(Dvojisko_drevo<int> node, float x, float y, float xOffset, float yOffset)
@@ -81,22 +86,31 @@ namespace Projekt
                 return;
 
             float nodeSize = Math.Min(this.ClientSize.Width, this.ClientSize.Height) / NodeSizeRatio;
-
-            if (!node.Levo.Prazno)
+            float scaledFontSize = nodeSize / 3; // Adjust font size relative to node size
+            using (Font scaledFont = new Font(this.Font.FontFamily, scaledFontSize, this.Font.Style))
             {
-                g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Levo.PosX, node.Levo.PosY);
-                DrawTree(g, node.Levo);
-            }
+                if (!node.Levo.Prazno)
+                {
+                    g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Levo.PosX, node.Levo.PosY);
+                    DrawTree(g, node.Levo);
+                }
 
-            if (!node.Desno.Prazno)
-            {
-                g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Desno.PosX, node.Desno.PosY);
-                DrawTree(g, node.Desno);
-            }
+                if (!node.Desno.Prazno)
+                {
+                    g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Desno.PosX, node.Desno.PosY);
+                    DrawTree(g, node.Desno);
+                }
 
-            g.FillEllipse(Brushes.LightBlue, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
-            g.DrawEllipse(Pens.Black, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
-            g.DrawString(node.Podatek.ToString(), this.Font, Brushes.Black, node.PosX - nodeSize / 4, node.PosY - nodeSize / 4);
+                g.FillEllipse(Brushes.LightBlue, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
+                g.DrawEllipse(Pens.Black, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
+
+                // Measure the size of the text to center it correctly
+                SizeF textSize = g.MeasureString(node.Podatek.ToString(), scaledFont);
+                float textX = node.PosX - textSize.Width / 2;
+                float textY = node.PosY - textSize.Height / 2;
+
+                g.DrawString(node.Podatek.ToString(), scaledFont, Brushes.Black, textX, textY);
+            }
         }
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
