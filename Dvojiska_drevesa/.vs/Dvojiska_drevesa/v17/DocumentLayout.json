@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|c:\\users\\jakob\\source\\repos\\prog3-projekt\\dvojiska_drevesa\\projekt\\dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\projekt\\dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\projekt\\iskalno_dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\iskalno_dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\projekt\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|c:\\users\\jakob\\source\\repos\\prog3-projekt\\dvojiska_drevesa\\projekt\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|c:\\users\\jakob\\source\\repos\\prog3-projekt\\dvojiska_drevesa\\projekt\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|c:\\users\\jakob\\source\\repos\\prog3-projekt\\dvojiska_drevesa\\projekt\\iskalno_dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{862DED42-617F-4777-AD98-BC684B6F5706}|Projekt\\Projekt.csproj|solutionrelative:projekt\\iskalno_dvojisko_drevo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,8 +30,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 6,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "Projekt\\Form1.Designer.cs",
+              "ToolTip": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.Designer.cs",
+              "RelativeToolTip": "Projekt\\Form1.Designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-12T12:02:38.356Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
@@ -33,8 +54,25 @@
               "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.cs",
+              "RelativeDocumentMoniker": "Projekt\\Form1.cs",
+              "ToolTip": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.cs",
+              "RelativeToolTip": "Projekt\\Form1.cs",
+              "ViewState": "AQIAAGgAAAAAAAAAAAA9wI8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-12T12:02:31.124Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Iskalno_dvojisko_drevo.cs",
               "DocumentMoniker": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Iskalno_dvojisko_drevo.cs",
               "RelativeDocumentMoniker": "Projekt\\Iskalno_dvojisko_drevo.cs",
@@ -53,14 +91,14 @@
               "RelativeDocumentMoniker": "Projekt\\Dvojisko_drevo.cs",
               "ToolTip": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Dvojisko_drevo.cs",
               "RelativeToolTip": "Projekt\\Dvojisko_drevo.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAA+AAAA",
+              "ViewState": "AQIAAGUAAAAAAAAAAAAwwHEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T19:29:59.775Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "C:\\Users\\Jakob\\source\\repos\\PROG3-Projekt\\Dvojiska_drevesa\\Projekt\\Form1.cs",
               "RelativeDocumentMoniker": "Projekt\\Form1.cs",
@@ -69,6 +107,10 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T19:29:53.817Z",
               "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         },
