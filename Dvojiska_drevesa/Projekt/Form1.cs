@@ -11,6 +11,8 @@ namespace Projekt
         private Dvojisko_drevo<int> draggedNode;
         private PointF originalPosition;
         private const float NodeSizeRatio = 20;
+        private float zoomFactor = 1.0f; // Initial zoom factor
+        private PointF offset = new PointF(0f, 0f); // Offset to maintain the zoom center
 
         public Form1()
         {
@@ -20,6 +22,7 @@ namespace Projekt
             this.MouseDown += Form1_MouseDown;
             this.MouseMove += Form1_MouseMove;
             this.MouseUp += Form1_MouseUp;
+            this.MouseWheel += Form1_MouseWheel; // Add mouse wheel event handler
 
             // Enable double buffering to reduce flicker
             this.DoubleBuffered = true;
@@ -66,6 +69,8 @@ namespace Projekt
             base.OnPaint(e);
             if (tree != null)
             {
+                e.Graphics.TranslateTransform(offset.X, offset.Y); // Translate to maintain zoom center
+                e.Graphics.ScaleTransform(zoomFactor, zoomFactor); // Apply zoom factor
                 DrawTree(e.Graphics, tree);
             }
         }
@@ -107,6 +112,13 @@ namespace Projekt
                     Cursor = Cursors.Hand;
                 }
             }
+
+            // Start panning
+            if (e.Button == MouseButtons.Right)
+            {
+                dragStart = e.Location;
+                Cursor = Cursors.SizeAll;
+            }
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -115,8 +127,17 @@ namespace Projekt
             {
                 float dx = e.X - dragStart.Value.X;
                 float dy = e.Y - dragStart.Value.Y;
-                draggedNode.PosX = originalPosition.X + dx;
-                draggedNode.PosY = originalPosition.Y + dy;
+                draggedNode.PosX = originalPosition.X + dx / zoomFactor;
+                draggedNode.PosY = originalPosition.Y + dy / zoomFactor;
+                this.Invalidate();
+            }
+
+            // Handle panning
+            if (dragStart.HasValue && e.Button == MouseButtons.Right)
+            {
+                offset.X += e.X - dragStart.Value.X;
+                offset.Y += e.Y - dragStart.Value.Y;
+                dragStart = e.Location;
                 this.Invalidate();
             }
         }
@@ -131,6 +152,34 @@ namespace Projekt
                 Cursor = Cursors.Default;
                 this.Invalidate();
             }
+
+            // End panning
+            if (e.Button == MouseButtons.Right)
+            {
+                dragStart = null;
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void Form1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            const float zoomIncrement = 0.1f;
+
+            if (e.Delta > 0)
+            {
+                zoomFactor += zoomIncrement;
+            }
+            else if (e.Delta < 0 && zoomFactor > zoomIncrement)
+            {
+                zoomFactor -= zoomIncrement;
+            }
+
+            // Adjust the offset to ensure the zoom is centered around the mouse position
+            float scale = zoomFactor / (zoomFactor + (e.Delta > 0 ? -zoomIncrement : zoomIncrement));
+            offset.X = e.X - scale * (e.X - offset.X);
+            offset.Y = e.Y - scale * (e.Y - offset.Y);
+
+            this.Invalidate();
         }
 
         private Dvojisko_drevo<int> FindNodeAtPosition(Dvojisko_drevo<int> node, Point location)

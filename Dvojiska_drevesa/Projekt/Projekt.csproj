@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dvojisko_drevo.cs" />
-    <Compile Include="Iskalno_dvojisko_drevo.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

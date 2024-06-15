@@ -38,8 +38,6 @@ namespace Projekt
         /// <returns>Vrne true če podatek obstaja v drevesu, sicer vrne false.</returns>
         public bool Iskanje(T vrednost)
         {
-            if (vrednost == Podatek)
-                return true;
             if (Prazno)
                 return false;
             if (!Levo.Prazno && Levo.Iskanje(vrednost))
