@@ -32,16 +32,16 @@ namespace Projekt
         }
 
         /// <summary>
-        /// Metoda pregleda ali podatek obstaja v drevesu.
+        /// Metoda pogleda če podatek 'vrednost' obstaja v drevesu.
         /// </summary>
         /// <param name="vrednost">Vrednost podatka</param>
         /// <returns>Vrne true če podatek obstaja v drevesu, sicer vrne false.</returns>
         public bool Iskanje(T vrednost)
         {
-            if (vrednost == Podatek)
-                return true;
             if (Prazno)
                 return false;
+            if (Podatek.Equals(vrednost))
+                return true;
             if (!Levo.Prazno && Levo.Iskanje(vrednost))
                 return true;
             if (!Desno.Prazno && Desno.Iskanje(vrednost))
@@ -49,13 +49,25 @@ namespace Projekt
             return false;
         }
 
-        // Method for constructing a tree
+        /// <summary>
+        /// Metoda sestavi drevo.
+        /// </summary>
+        /// <param name="podatekVKorenu">Podatek v korenu</param>
+        /// <param name="levoDrevo">Levo poddrevo</param>
+        /// <param name="desnoDrevo">Desno poddrevo</param>
+        /// <param name="identifikator">TODO - A je to potrebno?</param>
+        /// <returns>Vrne novo dvojiško drevo.</returns>
         public static Dvojisko_drevo<T> Sestavi(T podatekVKorenu, Dvojisko_drevo<T> levoDrevo, Dvojisko_drevo<T> desnoDrevo, string identifikator)
         {
             return new Dvojisko_drevo<T>(podatekVKorenu, levoDrevo, desnoDrevo, identifikator);
         }
 
-        // Method for traversing the tree
+        /// <summary>
+        /// Metoda za pregled drevesa. Pregled drevesa naredi po podanem vzorcu. Možni ukazi za vzorec so 'l', 'k' in 'd'.
+        /// </summary>
+        /// <param name="drevo">Dvojiško drevo</param>
+        /// <param name="vzorec">Vzorec za pregled drevesa</param>
+        /// <returns>Vrne pregled drevesa po vzorcu.</returns>
         public static string Obhod(Dvojisko_drevo<T> drevo, string vzorec)
         {
             if (drevo.Prazno)
@@ -76,13 +88,19 @@ namespace Projekt
                         vrni.Append($"{drevo.Identifikator}:{drevo.Podatek},");
                         break;
                     default:
-                        throw new Exception($"Napačen znak v obhodu ({znak}). Dovoljeni znaki so 'd', 'k' in 'l'.");
+                        throw new Exception($"Napačen znak v obhodu ({znak}). Dovoljeni znaki so 'l', 'k' in 'd'.");
                 }
             }
             return vrni.ToString();
         }
 
-        // Method for constructing a tree from an array
+        /// <summary>
+        /// Metoda za sestavljanje drevesa iz tabele.
+        /// </summary>
+        /// <param name="tabela">Tabela podatkov</param>
+        /// <param name="polozajKorena">Začetni položaj vozlišča</param>
+        /// <param name="identifikator">Začetni identifikator</param>
+        /// <returns>Vrne novo dvojiško drevo.</returns>
         public static Dvojisko_drevo<T> SestaviIzTabele(T[] tabela, int polozajKorena = 1, string identifikator = "1")
         {
             if (polozajKorena >= tabela.Length || EqualityComparer<T>.Default.Equals(tabela[polozajKorena], default(T)))
@@ -93,7 +111,10 @@ namespace Projekt
             return Sestavi(tabela[polozajKorena], levo, desno, identifikator);
         }
 
-        // Method for converting the tree to a string
+        /// <summary>
+        /// Metoda vrne niz, ki predstavlja vmesni pregled drevesa.
+        /// </summary>
+        /// <returns>Vrne dvojiško drevo kot niz.</returns>
         public override string ToString()
         {
             try
@@ -107,7 +128,11 @@ namespace Projekt
             }
         }
 
-        // Method for constructing a tree from a dictionary
+        /// <summary>
+        /// Metoda sestavi drevo iz slovarja.
+        /// </summary>
+        /// <param name="slovar"></param>
+        /// <returns></returns>
         public static Dvojisko_drevo<T> SestaviIzSlovarja(Dictionary<string, T> slovar)
         {
             if (!slovar.TryGetValue("1", out T rootData))
