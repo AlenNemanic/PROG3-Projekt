@@ -20,10 +20,15 @@ namespace Projekt
             this.MouseDown += Form1_MouseDown;
             this.MouseMove += Form1_MouseMove;
             this.MouseUp += Form1_MouseUp;
+
+            // Enable double buffering to reduce flicker
+            this.DoubleBuffered = true;
         }
 
         private void Form1_Resize(object sender, EventArgs e)
         {
+            // Recalculate positions of the tree nodes when the form is resized
+            SetInitialPositions(tree, this.ClientSize.Width / 2, 20, this.ClientSize.Width / 4, 30);
             this.Invalidate();
         }
 
@@ -74,14 +79,14 @@ namespace Projekt
 
             if (!node.Levo.Prazno)
             {
-                DrawTree(g, node.Levo);
                 g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Levo.PosX, node.Levo.PosY);
+                DrawTree(g, node.Levo);
             }
 
             if (!node.Desno.Prazno)
             {
-                DrawTree(g, node.Desno);
                 g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Desno.PosX, node.Desno.PosY);
+                DrawTree(g, node.Desno);
             }
 
             g.FillEllipse(Brushes.LightBlue, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
@@ -98,6 +103,8 @@ namespace Projekt
                 {
                     dragStart = e.Location;
                     originalPosition = new PointF(draggedNode.PosX, draggedNode.PosY);
+                    // Provide visual feedback for the selected node
+                    Cursor = Cursors.Hand;
                 }
             }
         }
@@ -120,6 +127,8 @@ namespace Projekt
             {
                 draggedNode = null;
                 dragStart = null;
+                // Reset the cursor after dragging
+                Cursor = Cursors.Default;
                 this.Invalidate();
             }
         }
