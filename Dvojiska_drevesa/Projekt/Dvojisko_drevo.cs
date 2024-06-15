@@ -31,18 +31,21 @@ namespace Projekt
             Identifikator = identifikator;
         }
 
-        // Method for searching a value in the tree
+        /// <summary>
+        /// Metoda pregleda ali podatek obstaja v drevesu.
+        /// </summary>
+        /// <param name="vrednost">Vrednost podatka</param>
+        /// <returns>Vrne true če podatek obstaja v drevesu, sicer vrne false.</returns>
         public bool Iskanje(T vrednost)
         {
+            if (vrednost == Podatek)
+                return true;
             if (Prazno)
                 return false;
-            int comparison = Podatek.CompareTo(vrednost);
-            if (comparison == 0)
+            if (!Levo.Prazno && Levo.Iskanje(vrednost))
                 return true;
-            if (comparison > 0 && !Levo.Prazno)
-                return Levo.Iskanje(vrednost);
-            if (comparison < 0 && !Desno.Prazno)
-                return Desno.Iskanje(vrednost);
+            if (!Desno.Prazno && Desno.Iskanje(vrednost))
+                return true;
             return false;
         }
 
