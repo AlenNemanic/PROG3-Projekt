@@ -1,5 +1,5 @@
-
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -14,12 +14,17 @@ namespace Projekt
         private const float NodeSizeRatio = 20;
         private float zoomFactor = 1.0f; // Initial zoom factor
         private PointF offset = new PointF(0f, 0f); // Offset to maintain the zoom center
+        private Timer traversalTimer;
+        private List<Dvojisko_drevo<int>> traversalPath;
+        private int currentTraversalIndex;
+        private Dvojisko_drevo<int> highlightedNode;
 
         public Form1()
         {
             InitializeComponent();
             InitializeTree();
             InitializeTreePositions(); // Set initial positions
+            InitializeTraversal(); // Initialize the traversal functionality
             this.Resize += Form1_Resize;
             this.MouseDown += Form1_MouseDown;
             this.MouseMove += Form1_MouseMove;
@@ -57,16 +62,16 @@ namespace Projekt
 
         private void SetInitialPositions(Dvojisko_drevo<int> node, float x, float y, float xOffset, float yOffset)
         {
-            if (node.Prazno)
+            if (node == null || node.Prazno)
                 return;
 
             node.PosX = x;
             node.PosY = y;
 
-            if (!node.Levo.Prazno)
+            if (node.Levo != null && !node.Levo.Prazno)
                 SetInitialPositions(node.Levo, x - xOffset, y + yOffset, xOffset / 2, yOffset);
 
-            if (!node.Desno.Prazno)
+            if (node.Desno != null && !node.Desno.Prazno)
                 SetInitialPositions(node.Desno, x + xOffset, y + yOffset, xOffset / 2, yOffset);
         }
 
@@ -83,26 +88,32 @@ namespace Projekt
 
         private void DrawTree(Graphics g, Dvojisko_drevo<int> node)
         {
-            if (node.Prazno)
+            if (node == null || node.Prazno)
                 return;
 
             float nodeSize = Math.Min(this.ClientSize.Width, this.ClientSize.Height) / NodeSizeRatio;
             float scaledFontSize = nodeSize / 3; // Adjust font size relative to node size
             using (Font scaledFont = new Font(this.Font.FontFamily, scaledFontSize, this.Font.Style))
             {
-                if (!node.Levo.Prazno)
+                if (node.Levo != null && !node.Levo.Prazno)
                 {
-                    g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Levo.PosX, node.Levo.PosY);
+                    // Use red pen if the left child is the highlighted node
+                    Pen pen = highlightedNode == node.Levo ? Pens.Red : Pens.Black;
+                    g.DrawLine(pen, node.PosX, node.PosY, node.Levo.PosX, node.Levo.PosY);
                     DrawTree(g, node.Levo);
                 }
 
-                if (!node.Desno.Prazno)
+                if (node.Desno != null && !node.Desno.Prazno)
                 {
-                    g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Desno.PosX, node.Desno.PosY);
+                    // Use red pen if the right child is the highlighted node
+                    Pen pen = highlightedNode == node.Desno ? Pens.Red : Pens.Black;
+                    g.DrawLine(pen, node.PosX, node.PosY, node.Desno.PosX, node.Desno.PosY);
                     DrawTree(g, node.Desno);
                 }
 
-                g.FillEllipse(Brushes.LightBlue, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
+                // Use orange brush if the current node is the highlighted node
+                Brush brush = highlightedNode == node ? Brushes.Orange : Brushes.LightBlue;
+                g.FillEllipse(brush, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
                 g.DrawEllipse(Pens.Black, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
 
                 // Measure the size of the text to center it correctly
@@ -199,7 +210,7 @@ namespace Projekt
 
         private Dvojisko_drevo<int> FindNodeAtPosition(Dvojisko_drevo<int> node, Point location)
         {
-            if (node.Prazno)
+            if (node == null || node.Prazno)
                 return null;
 
             float nodeSize = Math.Min(this.ClientSize.Width, this.ClientSize.Height) / NodeSizeRatio;
@@ -211,6 +222,81 @@ namespace Projekt
             if (found == null)
                 found = FindNodeAtPosition(node.Desno, location);
             return found;
+        }
+
+        private void InitializeTraversal()
+        {
+            traversalTimer = new Timer();
+            traversalTimer.Interval = 500; // Set the interval for the animation (in milliseconds)
+            traversalTimer.Tick += TraversalTimer_Tick;
+        }
+
+        private void StartTraversal(List<Dvojisko_drevo<int>> path)
+        {
+            traversalPath = path;
+            currentTraversalIndex = 0;
+            traversalTimer.Start();
+        }
+
+        private void TraversalTimer_Tick(object sender, EventArgs e)
+        {
+            if (currentTraversalIndex < traversalPath.Count)
+            {
+                highlightedNode = traversalPath[currentTraversalIndex];
+                currentTraversalIndex++;
+                this.Invalidate();
+            }
+            else
+            {
+                traversalTimer.Stop();
+                highlightedNode = null;
+                this.Invalidate();
+            }
+        }
+
+        private void PreOrderButton_Click(object sender, EventArgs e)
+        {
+            var path = new List<Dvojisko_drevo<int>>();
+            PreOrderTraversal(tree, path);
+            StartTraversal(path);
+        }
+
+        private void InOrderButton_Click(object sender, EventArgs e)
+        {
+            var path = new List<Dvojisko_drevo<int>>();
+            InOrderTraversal(tree, path);
+            StartTraversal(path);
+        }
+
+        private void PostOrderButton_Click(object sender, EventArgs e)
+        {
+            var path = new List<Dvojisko_drevo<int>>();
+            PostOrderTraversal(tree, path);
+            StartTraversal(path);
+        }
+
+        private void PreOrderTraversal(Dvojisko_drevo<int> node, List<Dvojisko_drevo<int>> path)
+        {
+            if (node == null || node.Prazno) return;
+            path.Add(node);
+            PreOrderTraversal(node.Levo, path);
+            PreOrderTraversal(node.Desno, path);
+        }
+
+        private void InOrderTraversal(Dvojisko_drevo<int> node, List<Dvojisko_drevo<int>> path)
+        {
+            if (node == null || node.Prazno) return;
+            InOrderTraversal(node.Levo, path);
+            path.Add(node);
+            InOrderTraversal(node.Desno, path);
+        }
+
+        private void PostOrderTraversal(Dvojisko_drevo<int> node, List<Dvojisko_drevo<int>> path)
+        {
+            if (node == null || node.Prazno) return;
+            PostOrderTraversal(node.Levo, path);
+            PostOrderTraversal(node.Desno, path);
+            path.Add(node);
         }
     }
 }
