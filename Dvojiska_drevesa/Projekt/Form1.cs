@@ -11,15 +11,19 @@ namespace Projekt
         private Dvojisko_drevo<int> draggedNode;
         private PointF originalPosition;
         private const float NodeSizeRatio = 20;
+        private float zoomFactor = 1.0f; // Initial zoom factor
+        private PointF offset = new PointF(0f, 0f); // Offset to maintain the zoom center
 
         public Form1()
         {
             InitializeComponent();
             InitializeTree();
+            InitializeTreePositions(); // Set initial positions
             this.Resize += Form1_Resize;
             this.MouseDown += Form1_MouseDown;
             this.MouseMove += Form1_MouseMove;
             this.MouseUp += Form1_MouseUp;
+            this.MouseWheel += Form1_MouseWheel; // Add mouse wheel event handler
 
             // Enable double buffering to reduce flicker
             this.DoubleBuffered = true;
@@ -27,8 +31,7 @@ namespace Projekt
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            // Recalculate positions of the tree nodes when the form is resized
-            SetInitialPositions(tree, this.ClientSize.Width / 2, 20, this.ClientSize.Width / 4, 30);
+            InitializeTreePositions(); // Recalculate positions of the tree nodes when the form is resized
             this.Invalidate();
         }
 
@@ -43,7 +46,12 @@ namespace Projekt
             tree.Desno.Levo = new Dvojisko_drevo<int>(12);
             tree.Desno.Desno = new Dvojisko_drevo<int>(18);
 
-            SetInitialPositions(tree, this.ClientSize.Width / 2, 20, this.ClientSize.Width / 4, 30);
+            InitializeTreePositions(); // Set initial positions
+        }
+
+        private void InitializeTreePositions()
+        {
+            SetInitialPositions(tree, this.ClientSize.Width / 2, 20, this.ClientSize.Width / 4, this.ClientSize.Height / 4);
         }
 
         private void SetInitialPositions(Dvojisko_drevo<int> node, float x, float y, float xOffset, float yOffset)
@@ -66,6 +74,8 @@ namespace Projekt
             base.OnPaint(e);
             if (tree != null)
             {
+                e.Graphics.TranslateTransform(offset.X, offset.Y); // Translate to maintain zoom center
+                e.Graphics.ScaleTransform(zoomFactor, zoomFactor); // Apply zoom factor
                 DrawTree(e.Graphics, tree);
             }
         }
@@ -76,22 +86,31 @@ namespace Projekt
                 return;
 
             float nodeSize = Math.Min(this.ClientSize.Width, this.ClientSize.Height) / NodeSizeRatio;
-
-            if (!node.Levo.Prazno)
+            float scaledFontSize = nodeSize / 3; // Adjust font size relative to node size
+            using (Font scaledFont = new Font(this.Font.FontFamily, scaledFontSize, this.Font.Style))
             {
-                g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Levo.PosX, node.Levo.PosY);
-                DrawTree(g, node.Levo);
-            }
+                if (!node.Levo.Prazno)
+                {
+                    g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Levo.PosX, node.Levo.PosY);
+                    DrawTree(g, node.Levo);
+                }
 
-            if (!node.Desno.Prazno)
-            {
-                g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Desno.PosX, node.Desno.PosY);
-                DrawTree(g, node.Desno);
-            }
+                if (!node.Desno.Prazno)
+                {
+                    g.DrawLine(Pens.Black, node.PosX, node.PosY, node.Desno.PosX, node.Desno.PosY);
+                    DrawTree(g, node.Desno);
+                }
 
-            g.FillEllipse(Brushes.LightBlue, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
-            g.DrawEllipse(Pens.Black, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
-            g.DrawString(node.Podatek.ToString(), this.Font, Brushes.Black, node.PosX - nodeSize / 4, node.PosY - nodeSize / 4);
+                g.FillEllipse(Brushes.LightBlue, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
+                g.DrawEllipse(Pens.Black, node.PosX - nodeSize / 2, node.PosY - nodeSize / 2, nodeSize, nodeSize);
+
+                // Measure the size of the text to center it correctly
+                SizeF textSize = g.MeasureString(node.Podatek.ToString(), scaledFont);
+                float textX = node.PosX - textSize.Width / 2;
+                float textY = node.PosY - textSize.Height / 2;
+
+                g.DrawString(node.Podatek.ToString(), scaledFont, Brushes.Black, textX, textY);
+            }
         }
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
@@ -107,6 +126,13 @@ namespace Projekt
                     Cursor = Cursors.Hand;
                 }
             }
+
+            // Start panning
+            if (e.Button == MouseButtons.Right)
+            {
+                dragStart = e.Location;
+                Cursor = Cursors.SizeAll;
+            }
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -115,8 +141,17 @@ namespace Projekt
             {
                 float dx = e.X - dragStart.Value.X;
                 float dy = e.Y - dragStart.Value.Y;
-                draggedNode.PosX = originalPosition.X + dx;
-                draggedNode.PosY = originalPosition.Y + dy;
+                draggedNode.PosX = originalPosition.X + dx / zoomFactor;
+                draggedNode.PosY = originalPosition.Y + dy / zoomFactor;
+                this.Invalidate();
+            }
+
+            // Handle panning
+            if (dragStart.HasValue && e.Button == MouseButtons.Right)
+            {
+                offset.X += e.X - dragStart.Value.X;
+                offset.Y += e.Y - dragStart.Value.Y;
+                dragStart = e.Location;
                 this.Invalidate();
             }
         }
@@ -131,6 +166,34 @@ namespace Projekt
                 Cursor = Cursors.Default;
                 this.Invalidate();
             }
+
+            // End panning
+            if (e.Button == MouseButtons.Right)
+            {
+                dragStart = null;
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void Form1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            const float zoomIncrement = 0.1f;
+
+            if (e.Delta > 0)
+            {
+                zoomFactor += zoomIncrement;
+            }
+            else if (e.Delta < 0 && zoomFactor > zoomIncrement)
+            {
+                zoomFactor -= zoomIncrement;
+            }
+
+            // Adjust the offset to ensure the zoom is centered around the mouse position
+            float scale = zoomFactor / (zoomFactor + (e.Delta > 0 ? -zoomIncrement : zoomIncrement));
+            offset.X = e.X - scale * (e.X - offset.X);
+            offset.Y = e.Y - scale * (e.Y - offset.Y);
+
+            this.Invalidate();
         }
 
         private Dvojisko_drevo<int> FindNodeAtPosition(Dvojisko_drevo<int> node, Point location)
