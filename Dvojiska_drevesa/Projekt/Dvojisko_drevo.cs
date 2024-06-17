@@ -47,13 +47,25 @@ namespace Projekt
             return false;
         }
 
-        // Method for constructing a tree
+        /// <summary>
+        /// Metoda za kosntruriranje drevesa.
+        /// </summary>
+        /// <param name="podatekVKorenu"></param>
+        /// <param name="levoDrevo"></param>
+        /// <param name="desnoDrevo"></param>
+        /// <param name="identifikator"></param>
+        /// <returns>Vrne novo dvojiško drevo.</returns>
         public static Dvojisko_drevo<T> Sestavi(T podatekVKorenu, Dvojisko_drevo<T> levoDrevo, Dvojisko_drevo<T> desnoDrevo, string identifikator)
         {
             return new Dvojisko_drevo<T>(podatekVKorenu, levoDrevo, desnoDrevo, identifikator);
         }
 
-        // Method for traversing the tree
+        /// <summary>
+        /// Metoda za obhod drevesa. Dovoljeni znaki so 'l', 'k' in 'd'.
+        /// </summary>
+        /// <param name="drevo">Dvojiško drevo</param>
+        /// <param name="vzorec">Vzorec po katerem bomo naredili obhod</param>
+        /// <returns>Vrne obhod drevesa po vzorcu.</returns>
         public static string Obhod(Dvojisko_drevo<T> drevo, string vzorec)
         {
             if (drevo.Prazno)
@@ -80,18 +92,10 @@ namespace Projekt
             return vrni.ToString();
         }
 
-        // Method for constructing a tree from an array
-        public static Dvojisko_drevo<T> SestaviIzTabele(T[] tabela, int polozajKorena = 1, string identifikator = "1")
-        {
-            if (polozajKorena >= tabela.Length || EqualityComparer<T>.Default.Equals(tabela[polozajKorena], default(T)))
-                return new Dvojisko_drevo<T>();
-
-            Dvojisko_drevo<T> levo = SestaviIzTabele(tabela, 2 * polozajKorena, identifikator + "L");
-            Dvojisko_drevo<T> desno = SestaviIzTabele(tabela, 2 * polozajKorena + 1, identifikator + "R");
-            return Sestavi(tabela[polozajKorena], levo, desno, identifikator);
-        }
-
-        // Method for converting the tree to a string
+        /// <summary>
+        /// Metoda za izpis drevesa v niz.
+        /// </summary>
+        /// <returns>Vrne vmesni pregled drevesa.</returns>
         public override string ToString()
         {
             try
@@ -105,13 +109,32 @@ namespace Projekt
             }
         }
 
-        // Method for constructing a tree from a dictionary
+        /// <summary>
+        /// Metoda za konstruriranje drevesa iz tabele.
+        /// </summary>
+        /// <param name="tabela"></param>
+        /// <param name="polozajKorena"></param>
+        /// <param name="identifikator"></param>
+        /// <returns>Vrne novo dvojiško drevo.</returns>
+        public static Dvojisko_drevo<T> SestaviIzTabele(T[] tabela, int polozajKorena = 1, string identifikator = "1")
+        {
+            if (polozajKorena >= tabela.Length || EqualityComparer<T>.Default.Equals(tabela[polozajKorena], default(T)))
+                return new Dvojisko_drevo<T>();
+
+            Dvojisko_drevo<T> levo = SestaviIzTabele(tabela, 2 * polozajKorena, identifikator + "L");
+            Dvojisko_drevo<T> desno = SestaviIzTabele(tabela, 2 * polozajKorena + 1, identifikator + "R");
+            return Sestavi(tabela[polozajKorena], levo, desno, identifikator);
+        }
+
+        /// <summary>
+        /// Metoda za konstruriranje drevesa iz slovarja.
+        /// </summary>
+        /// <param name="slovar"></param>
+        /// <returns>Vrne novo dvojiško drevo.</returns>
         public static Dvojisko_drevo<T> SestaviIzSlovarja(Dictionary<string, T> slovar)
         {
             if (!slovar.TryGetValue("1", out T rootData))
-            {
                 throw new Exception("Ne morem sestaviti drevesa: Koren '1' ni v slovarju.");
-            }
 
             Dvojisko_drevo<T> koren = new Dvojisko_drevo<T>(rootData, identifikator: "1");
             Queue<Dvojisko_drevo<T>> vrsta = new Queue<Dvojisko_drevo<T>>();
@@ -134,7 +157,6 @@ namespace Projekt
                     vrsta.Enqueue(trenutni.Desno);
                 }
             }
-
             return koren;
         }
     }

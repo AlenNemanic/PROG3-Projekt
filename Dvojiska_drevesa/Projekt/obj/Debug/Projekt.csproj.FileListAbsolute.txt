@@ -7,3 +7,13 @@ C:\Users\Jakob\source\repos\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Pro
 C:\Users\Jakob\source\repos\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.csproj.CoreCompileInputs.cache
 C:\Users\Jakob\source\repos\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.exe
 C:\Users\Jakob\source\repos\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.pdb
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\bin\Debug\Projekt.exe.config
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\bin\Debug\Projekt.exe
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\bin\Debug\Projekt.pdb
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.csproj.AssemblyReference.cache
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.Properties.Resources.resources
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.csproj.GenerateResource.cache
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.csproj.CoreCompileInputs.cache
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.exe
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.pdb
+C:\Users\ALEN\OneDrive - Univerza v Ljubljani\Desktop\FMF\3. Letnik\PROG3\PROG3-Projekt\Dvojiska_drevesa\Projekt\obj\Debug\Projekt.Form1.resources
