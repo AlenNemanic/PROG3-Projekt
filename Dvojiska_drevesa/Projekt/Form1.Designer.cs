@@ -30,6 +30,7 @@
             this.radioButtonPovezi = new System.Windows.Forms.RadioButton();
             this.radioButtonOdstrani = new System.Windows.Forms.RadioButton();
             this.radioButtonPremakni = new System.Windows.Forms.RadioButton();
+            this.textBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
@@ -84,7 +85,7 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new System.Drawing.Point(15, 476);
+            this.pictureBox.Location = new System.Drawing.Point(12, 12);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(350, 500);
             this.pictureBox.TabIndex = 5;
@@ -147,9 +148,18 @@
             this.radioButtonPremakni.Text = "Premakni";
             this.radioButtonPremakni.UseVisualStyleBackColor = true;
             // 
+            // textBox
+            // 
+            this.textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBox.Location = new System.Drawing.Point(113, 158);
+            this.textBox.Name = "textBox";
+            this.textBox.Size = new System.Drawing.Size(45, 21);
+            this.textBox.TabIndex = 11;
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1184, 561);
+            this.Controls.Add(this.textBox);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.UvoziGumb);
             this.Controls.Add(this.IzvoziGumb);
@@ -163,6 +173,7 @@
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -174,5 +185,6 @@
         private System.Windows.Forms.RadioButton radioButtonPremakni;
         private System.Windows.Forms.RadioButton radioButtonOdstrani;
         private System.Windows.Forms.RadioButton radioButtonPovezi;
+        private System.Windows.Forms.TextBox textBox;
     }
 }

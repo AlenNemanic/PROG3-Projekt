@@ -139,10 +139,10 @@ namespace Projekt
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (radioButtonDodaj.Checked)
+            if (radioButtonDodaj.Checked && int.TryParse(textBox.Text, out int vrednost))
             {
                 int sirina = pictureBox.Width;
-                DvojiskoDrevo<int> novoDrevo = new DvojiskoDrevo<int>(1);
+                DvojiskoDrevo<int> novoDrevo = new DvojiskoDrevo<int>(vrednost);
                 drevesa.Add(novoDrevo);
                 SetInitialPositions(novoDrevo, e.Location.X, e.Location.Y, (Width - sirina) / 4, (Height - sirina) / 4);
                 Invalidate();
@@ -186,7 +186,6 @@ namespace Projekt
                             {
                                 IzbrisiVozlisce(drevo, nodeToRemove);
                             }
-                            InitializeTreePositions();
                             Invalidate();
                             break;
                         }
