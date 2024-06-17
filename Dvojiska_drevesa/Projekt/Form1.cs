@@ -218,15 +218,13 @@ namespace Projekt
         private void PoveziVozlisci(DvojiskoDrevo<int> prvoVozlisce, DvojiskoDrevo<int> drugoVozlisce)
         {
             // Remove secondNode from its current tree
-            foreach (DvojiskoDrevo<int> drevo in drevesa)
+            foreach (DvojiskoDrevo<int> drevo in drevesa)   // Gremo po vseh drevesih, dokler ne najdemo tistega, kjer se nahaja drugoVozlisce
             {
-                if (IzbrisiVozlisce(drevo, drugoVozlisce))
-                {
+                if (IzbrisiVozlisce(drevo, drugoVozlisce)) // Ko ga najdemo izbrišemo drugoVozlisce iz njega in konèamo zanko
                     break;
-                }
             }
 
-            // Connect secondNode to firstNode
+            // Povežemo drugoVozlisce s prvoVozlisce
             if (prvoVozlisce.Levo == null || prvoVozlisce.Levo.Prazno)
             {
                 prvoVozlisce.Levo = drugoVozlisce;
@@ -241,7 +239,6 @@ namespace Projekt
                 return;
             }
 
-            InitializeTreePositions();
             Invalidate();
         }
 
