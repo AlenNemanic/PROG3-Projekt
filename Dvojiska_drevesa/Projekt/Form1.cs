@@ -417,5 +417,17 @@ namespace Projekt
                 }
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DvojiskoDrevo<int> drevo2 = new DvojiskoDrevo<int>(10);
+            drevo2.Levo = new DvojiskoDrevo<int>(5);
+            drevo2.Desno = new DvojiskoDrevo<int>(15);
+            drevo2.Levo.Levo = new DvojiskoDrevo<int>(3);
+            drevo2.Levo.Desno = new DvojiskoDrevo<int>(7);
+            drevo2.Desno.Levo = new DvojiskoDrevo<int>(12);
+            drevo2.Desno.Desno = new DvojiskoDrevo<int>(18);
+            drevo2.IzDrevesaSlovar();
+        }
     }
 }

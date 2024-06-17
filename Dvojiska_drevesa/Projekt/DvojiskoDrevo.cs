@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Projekt
 {
     public class DvojiskoDrevo<T> where T : IComparable<T>
     {
+        private DvojiskoDrevo<T> _levoPoddrevo;
+        private DvojiskoDrevo<T> _desnoPoddrevo;
+        private bool _prazno;
+
         public T Podatek { get; set; }
-        public DvojiskoDrevo<T> Levo { get; set; }
-        public DvojiskoDrevo<T> Desno { get; set; }
-        public bool Prazno { get; private set; }
-        public string Identifikator { get; private set; }
+        public string Identifikator { get; set; }
         public float PosX { get; set; }
         public float PosY { get; set; }
 
@@ -17,18 +19,64 @@ namespace Projekt
         {
             if (EqualityComparer<T>.Default.Equals(podatek, default(T)) && levo == null && desno == null)
             {
-                Prazno = true;
+                Podatek = podatek;
+                Prazno = true; 
                 Levo = null;
                 Desno = null;
             }
             else
             {
                 Podatek = podatek;
-                Levo = levo ?? new DvojiskoDrevo<T>();
-                Desno = desno ?? new DvojiskoDrevo<T>();
                 Prazno = false;
+                Levo = new DvojiskoDrevo<T>();
+                Desno = new DvojiskoDrevo<T>();
             }
             Identifikator = identifikator;
+        }
+
+        public bool Prazno
+        {
+            get { return _prazno; }
+            set
+            {
+
+            }
+        }
+
+        public DvojiskoDrevo<T> Levo
+        {
+            get { return _levoPoddrevo; }
+            set
+            {
+                if (Prazno == false && value != null && !EqualityComparer<T>.Default.Equals(Podatek, default(T)))
+                {
+                    _levoPoddrevo = new DvojiskoDrevo<T>();   
+                    _levoPoddrevo.Podatek = value.Podatek;
+                    _levoPoddrevo.Identifikator = Identifikator + "L";
+                }
+                else
+                {
+                    _levoPoddrevo = value; //null
+                }
+            }
+        }
+
+        public DvojiskoDrevo<T> Desno
+        {
+            get { return _desnoPoddrevo; }
+            set
+            {
+                if (Prazno == false && value != null && !EqualityComparer<T>.Default.Equals(Podatek, default(T)))
+                {
+                    _desnoPoddrevo = new DvojiskoDrevo<T>();
+                    _desnoPoddrevo.Podatek = value.Podatek;
+                    _desnoPoddrevo.Identifikator = Identifikator + "D";
+                }
+                else
+                {
+                    _levoPoddrevo = value; // null
+                }
+            }
         }
 
         /// <summary>
@@ -68,9 +116,9 @@ namespace Projekt
         /// <returns>Vrne obhod drevesa po vzorcu.</returns>
         public static string Obhod(DvojiskoDrevo<T> drevo, string vzorec)
         {
-            if (drevo.Prazno)
+            if (drevo == null)
                 return "";
-
+            
             var vrni = new System.Text.StringBuilder();
             foreach (char znak in vzorec)
             {
@@ -158,6 +206,20 @@ namespace Projekt
                 }
             }
             return koren;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public void IzDrevesaSlovar()
+        {
+            using (StreamWriter pisi = new StreamWriter("izvoz.txt"))
+            {
+                string slovarText = Obhod(this, "kld");
+                pisi.WriteLine(slovarText);
+            }
         }
     }
 }
