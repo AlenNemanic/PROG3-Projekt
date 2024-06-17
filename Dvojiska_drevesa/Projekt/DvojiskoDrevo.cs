@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Projekt
 {
-    public class Dvojisko_drevo<T> where T : IComparable<T>
+    public class DvojiskoDrevo<T> where T : IComparable<T>
     {
         public T Podatek { get; set; }
-        public Dvojisko_drevo<T> Levo { get; set; }
-        public Dvojisko_drevo<T> Desno { get; set; }
+        public DvojiskoDrevo<T> Levo { get; set; }
+        public DvojiskoDrevo<T> Desno { get; set; }
         public bool Prazno { get; private set; }
         public string Identifikator { get; private set; }
         public float PosX { get; set; }
         public float PosY { get; set; }
 
-        public Dvojisko_drevo(T podatek = default(T), Dvojisko_drevo<T> levo = null, Dvojisko_drevo<T> desno = null, string identifikator = "1")
+        public DvojiskoDrevo(T podatek = default(T), DvojiskoDrevo<T> levo = null, DvojiskoDrevo<T> desno = null, string identifikator = "1")
         {
             if (EqualityComparer<T>.Default.Equals(podatek, default(T)) && levo == null && desno == null)
             {
@@ -24,8 +24,8 @@ namespace Projekt
             else
             {
                 Podatek = podatek;
-                Levo = levo ?? new Dvojisko_drevo<T>();
-                Desno = desno ?? new Dvojisko_drevo<T>();
+                Levo = levo ?? new DvojiskoDrevo<T>();
+                Desno = desno ?? new DvojiskoDrevo<T>();
                 Prazno = false;
             }
             Identifikator = identifikator;
@@ -55,9 +55,9 @@ namespace Projekt
         /// <param name="desnoDrevo"></param>
         /// <param name="identifikator"></param>
         /// <returns>Vrne novo dvojiško drevo.</returns>
-        public static Dvojisko_drevo<T> Sestavi(T podatekVKorenu, Dvojisko_drevo<T> levoDrevo, Dvojisko_drevo<T> desnoDrevo, string identifikator)
+        public static DvojiskoDrevo<T> Sestavi(T podatekVKorenu, DvojiskoDrevo<T> levoDrevo, DvojiskoDrevo<T> desnoDrevo, string identifikator)
         {
-            return new Dvojisko_drevo<T>(podatekVKorenu, levoDrevo, desnoDrevo, identifikator);
+            return new DvojiskoDrevo<T>(podatekVKorenu, levoDrevo, desnoDrevo, identifikator);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Projekt
         /// <param name="drevo">Dvojiško drevo</param>
         /// <param name="vzorec">Vzorec po katerem bomo naredili obhod</param>
         /// <returns>Vrne obhod drevesa po vzorcu.</returns>
-        public static string Obhod(Dvojisko_drevo<T> drevo, string vzorec)
+        public static string Obhod(DvojiskoDrevo<T> drevo, string vzorec)
         {
             if (drevo.Prazno)
                 return "";
@@ -116,13 +116,13 @@ namespace Projekt
         /// <param name="polozajKorena"></param>
         /// <param name="identifikator"></param>
         /// <returns>Vrne novo dvojiško drevo.</returns>
-        public static Dvojisko_drevo<T> SestaviIzTabele(T[] tabela, int polozajKorena = 1, string identifikator = "1")
+        public static DvojiskoDrevo<T> SestaviIzTabele(T[] tabela, int polozajKorena = 1, string identifikator = "1")
         {
             if (polozajKorena >= tabela.Length || EqualityComparer<T>.Default.Equals(tabela[polozajKorena], default(T)))
-                return new Dvojisko_drevo<T>();
+                return new DvojiskoDrevo<T>();
 
-            Dvojisko_drevo<T> levo = SestaviIzTabele(tabela, 2 * polozajKorena, identifikator + "L");
-            Dvojisko_drevo<T> desno = SestaviIzTabele(tabela, 2 * polozajKorena + 1, identifikator + "R");
+            DvojiskoDrevo<T> levo = SestaviIzTabele(tabela, 2 * polozajKorena, identifikator + "L");
+            DvojiskoDrevo<T> desno = SestaviIzTabele(tabela, 2 * polozajKorena + 1, identifikator + "R");
             return Sestavi(tabela[polozajKorena], levo, desno, identifikator);
         }
 
@@ -131,29 +131,29 @@ namespace Projekt
         /// </summary>
         /// <param name="slovar"></param>
         /// <returns>Vrne novo dvojiško drevo.</returns>
-        public static Dvojisko_drevo<T> SestaviIzSlovarja(Dictionary<string, T> slovar)
+        public static DvojiskoDrevo<T> SestaviIzSlovarja(Dictionary<string, T> slovar)
         {
             if (!slovar.TryGetValue("1", out T rootData))
                 throw new Exception("Ne morem sestaviti drevesa: Koren '1' ni v slovarju.");
 
-            Dvojisko_drevo<T> koren = new Dvojisko_drevo<T>(rootData, identifikator: "1");
-            Queue<Dvojisko_drevo<T>> vrsta = new Queue<Dvojisko_drevo<T>>();
+            DvojiskoDrevo<T> koren = new DvojiskoDrevo<T>(rootData, identifikator: "1");
+            Queue<DvojiskoDrevo<T>> vrsta = new Queue<DvojiskoDrevo<T>>();
             vrsta.Enqueue(koren);
 
             while (vrsta.Count > 0)
             {
-                Dvojisko_drevo<T> trenutni = vrsta.Dequeue();
+                DvojiskoDrevo<T> trenutni = vrsta.Dequeue();
                 string id = trenutni.Identifikator;
 
                 if (slovar.TryGetValue(id + "L", out T leftData))
                 {
-                    trenutni.Levo = new Dvojisko_drevo<T>(leftData, identifikator: id + "L");
+                    trenutni.Levo = new DvojiskoDrevo<T>(leftData, identifikator: id + "L");
                     vrsta.Enqueue(trenutni.Levo);
                 }
 
                 if (slovar.TryGetValue(id + "R", out T rightData))
                 {
-                    trenutni.Desno = new Dvojisko_drevo<T>(rightData, identifikator: id + "R");
+                    trenutni.Desno = new DvojiskoDrevo<T>(rightData, identifikator: id + "R");
                     vrsta.Enqueue(trenutni.Desno);
                 }
             }

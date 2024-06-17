@@ -7,18 +7,18 @@ namespace Projekt
 {
     public partial class Form1: Form
     {
-        private List<Dvojisko_drevo<int>> drevesa;
+        private List<DvojiskoDrevo<int>> drevesa;
         private Point? dragStart = null;
-        private Dvojisko_drevo<int> draggedNode;
+        private DvojiskoDrevo<int> draggedNode;
         private PointF zacetnaPozicija;
         private const float NodeSizeRatio = 20;
         private float zoomFactor = 1.0f; // Initial zoom factor
         private PointF offset = new PointF(0f, 0f); // Offset to maintain the zoom center
         private Timer casovnikPrehoda;
-        private List<Dvojisko_drevo<int>> potPrehoda;
+        private List<DvojiskoDrevo<int>> potPrehoda;
         private int trenutniIndeksPrehoda;
-        private Dvojisko_drevo<int> izbranoVozlisce;
-        private Dvojisko_drevo<int> prvoIzbranoVozlisce = null; // First selected node for connecting
+        private DvojiskoDrevo<int> izbranoVozlisce;
+        private DvojiskoDrevo<int> prvoIzbranoVozlisce = null; // First selected node for connecting
 
         public Form1()
         {
@@ -44,16 +44,16 @@ namespace Projekt
 
         private void InitializeTrees()
         {
-            drevesa = new List<Dvojisko_drevo<int>>();
+            drevesa = new List<DvojiskoDrevo<int>>();
 
             // Initialize a sample tree
-            Dvojisko_drevo<int> drevo1 = new Dvojisko_drevo<int>(10);
-            drevo1.Levo = new Dvojisko_drevo<int>(5);
-            drevo1.Desno = new Dvojisko_drevo<int>(15);
-            drevo1.Levo.Levo = new Dvojisko_drevo<int>(3);
-            drevo1.Levo.Desno = new Dvojisko_drevo<int>(7);
-            drevo1.Desno.Levo = new Dvojisko_drevo<int>(12);
-            drevo1.Desno.Desno = new Dvojisko_drevo<int>(18);
+            DvojiskoDrevo<int> drevo1 = new DvojiskoDrevo<int>(10);
+            drevo1.Levo = new DvojiskoDrevo<int>(5);
+            drevo1.Desno = new DvojiskoDrevo<int>(15);
+            drevo1.Levo.Levo = new DvojiskoDrevo<int>(3);
+            drevo1.Levo.Desno = new DvojiskoDrevo<int>(7);
+            drevo1.Desno.Levo = new DvojiskoDrevo<int>(12);
+            drevo1.Desno.Desno = new DvojiskoDrevo<int>(18);
 
             SetInitialPositions(drevo1, 100, 50, 50, 50);
 
@@ -63,13 +63,13 @@ namespace Projekt
         private void InitializeTreePositions()
         {
             int sirina = pictureBox.Width;
-            foreach (Dvojisko_drevo<int> drevo in drevesa)
+            foreach (DvojiskoDrevo<int> drevo in drevesa)
             {
                 SetInitialPositions(drevo, (sirina + Width) / 2, 50, (Width - sirina) / 4, (Height - sirina) / 4);
             }
         }
 
-        private void SetInitialPositions(Dvojisko_drevo<int> vozlisce, float x, float y, float xOffset, float yOffset)
+        private void SetInitialPositions(DvojiskoDrevo<int> vozlisce, float x, float y, float xOffset, float yOffset)
         {
             if (vozlisce == null || vozlisce.Prazno)
                 return;
@@ -89,7 +89,7 @@ namespace Projekt
             base.OnPaint(e);
             if (drevesa.Count != 0)
             {
-                foreach (Dvojisko_drevo<int> drevo in drevesa)
+                foreach (DvojiskoDrevo<int> drevo in drevesa)
                 {
                     e.Graphics.TranslateTransform(offset.X, offset.Y); // Translate to maintain zoom center
                     e.Graphics.ScaleTransform(zoomFactor, zoomFactor); // Apply zoom factor
@@ -98,7 +98,7 @@ namespace Projekt
             }
         }
 
-        private void DrawTree(Graphics g, Dvojisko_drevo<int> vozlisce)
+        private void DrawTree(Graphics g, DvojiskoDrevo<int> vozlisce)
         {
             if (vozlisce == null || vozlisce.Prazno)
                 return;
@@ -142,14 +142,14 @@ namespace Projekt
             if (radioButtonDodaj.Checked)
             {
                 int sirina = pictureBox.Width;
-                Dvojisko_drevo<int> novoDrevo = new Dvojisko_drevo<int>(1);
+                DvojiskoDrevo<int> novoDrevo = new DvojiskoDrevo<int>(1);
                 drevesa.Add(novoDrevo);
                 SetInitialPositions(novoDrevo, e.Location.X, e.Location.Y, (Width - sirina) / 4, (Height - sirina) / 4);
                 Invalidate();
             }
             else if (radioButtonPremakni.Checked)
             {
-                foreach (Dvojisko_drevo<int> drevo in drevesa)
+                foreach (DvojiskoDrevo<int> drevo in drevesa)
                 {
                     draggedNode = FindNodeAtPosition(drevo, e.Location);
                     if (draggedNode != null)
@@ -171,22 +171,33 @@ namespace Projekt
             }
             else if (radioButtonOdstrani.Checked)
             {
-                foreach (Dvojisko_drevo<int> drevo in drevesa)
+                for (int i = 0; i < drevesa.Count; i++)
                 {
-                    Dvojisko_drevo<int> nodeToRemove = FindNodeAtPosition(drevo, e.Location);
-                    if (nodeToRemove != null)
-                    {
-                        IzbrisiVozlisce(drevo, nodeToRemove);
-                        Invalidate();
-                        break;
+                    foreach (DvojiskoDrevo<int> drevo in drevesa)
+                    { 
+                        DvojiskoDrevo<int> nodeToRemove = FindNodeAtPosition(drevo, e.Location);
+                        if (nodeToRemove != null)
+                        {
+                            if (drevo == nodeToRemove)
+                            {
+                                drevesa.Remove(drevo);
+                            }
+                            else
+                            {
+                                IzbrisiVozlisce(drevo, nodeToRemove);
+                            }
+                            InitializeTreePositions();
+                            Invalidate();
+                            break;
+                        }
                     }
                 }
             }
             else if (radioButtonPovezi.Checked)
             {
-                foreach (Dvojisko_drevo<int> drevo in drevesa)
+                foreach (DvojiskoDrevo<int> drevo in drevesa)
                 {
-                    Dvojisko_drevo<int> selectedNode = FindNodeAtPosition(drevo, e.Location);
+                    DvojiskoDrevo<int> selectedNode = FindNodeAtPosition(drevo, e.Location);
                     if (selectedNode != null)
                     {
                         if (prvoIzbranoVozlisce == null)
@@ -204,10 +215,10 @@ namespace Projekt
             }
         }
 
-        private void PoveziVozlisci(Dvojisko_drevo<int> prvoVozlisce, Dvojisko_drevo<int> drugoVozlisce)
+        private void PoveziVozlisci(DvojiskoDrevo<int> prvoVozlisce, DvojiskoDrevo<int> drugoVozlisce)
         {
             // Remove secondNode from its current tree
-            foreach (Dvojisko_drevo<int> drevo in drevesa)
+            foreach (DvojiskoDrevo<int> drevo in drevesa)
             {
                 if (IzbrisiVozlisce(drevo, drugoVozlisce))
                 {
@@ -227,38 +238,30 @@ namespace Projekt
             else
             {
                 MessageBox.Show("The selected node already has two children.");
+                return;
             }
-
-            // Maintain secondNode's position
-            drugoVozlisce.PosX = prvoVozlisce.PosX;
-            drugoVozlisce.PosY = prvoVozlisce.PosY;
 
             InitializeTreePositions();
             Invalidate();
         }
 
-        private bool IzbrisiVozlisce(Dvojisko_drevo<int> koren, Dvojisko_drevo<int> nodeToRemove)
+        private bool IzbrisiVozlisce(DvojiskoDrevo<int> parent, DvojiskoDrevo<int> nodeToRemove)
         {
-            if (koren == null || koren.Prazno)
+            if (parent == null || parent.Prazno)
                 return false;
 
-            if (koren == nodeToRemove)
-            { 
-                koren = new Dvojisko_drevo<int>(); // Assign an empty node
+            if (parent.Levo == nodeToRemove)
+            {
+                parent.Levo = new DvojiskoDrevo<int>(); // Assign an empty node
                 return true;
             }
-            else if (koren.Levo == nodeToRemove)
+            else if (parent.Desno == nodeToRemove)
             {
-                koren.Levo = new Dvojisko_drevo<int>(); // Assign an empty node
-                return true;
-            }
-            else if (koren.Desno == nodeToRemove)
-            {
-                koren.Desno = new Dvojisko_drevo<int>(); // Assign an empty node
+                parent.Desno = new DvojiskoDrevo<int>(); // Assign an empty node
                 return true;
             }
 
-            return IzbrisiVozlisce(koren.Levo, nodeToRemove) || IzbrisiVozlisce(koren.Desno, nodeToRemove);
+            return IzbrisiVozlisce(parent.Levo, nodeToRemove) || IzbrisiVozlisce(parent.Desno, nodeToRemove);
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -318,7 +321,7 @@ namespace Projekt
             Invalidate();
         }
 
-        private Dvojisko_drevo<int> FindNodeAtPosition(Dvojisko_drevo<int> vozlisce, Point lokacija)
+        private DvojiskoDrevo<int> FindNodeAtPosition(DvojiskoDrevo<int> vozlisce, Point lokacija)
         {
             if (vozlisce == null || vozlisce.Prazno)
                 return null;
@@ -328,7 +331,7 @@ namespace Projekt
             if (rect.Contains(lokacija))
                 return vozlisce;
 
-            Dvojisko_drevo<int> found = FindNodeAtPosition(vozlisce.Levo, lokacija);
+            DvojiskoDrevo<int> found = FindNodeAtPosition(vozlisce.Levo, lokacija);
             if (found == null)
                 found = FindNodeAtPosition(vozlisce.Desno, lokacija);
             return found;
@@ -341,7 +344,7 @@ namespace Projekt
             casovnikPrehoda.Tick += CasovnikPrehoda_Tick;
         }
 
-        private void ZacniPrehod(List<Dvojisko_drevo<int>> pot)
+        private void ZacniPrehod(List<DvojiskoDrevo<int>> pot)
         {
             potPrehoda = pot;
             trenutniIndeksPrehoda = 0;
@@ -365,8 +368,8 @@ namespace Projekt
 
         private void PremiPregledGumb_Click(object sender, EventArgs e)
         {
-            List<Dvojisko_drevo<int>> pot = new List<Dvojisko_drevo<int>>();
-            foreach (Dvojisko_drevo<int> drevo in drevesa)
+            List<DvojiskoDrevo<int>> pot = new List<DvojiskoDrevo<int>>();
+            foreach (DvojiskoDrevo<int> drevo in drevesa)
             {
                 PregledDrevesa(drevo, pot, "kld");
             }
@@ -375,8 +378,8 @@ namespace Projekt
 
         private void VmesniPregledGumb_Click(object sender, EventArgs e)
         {
-            List<Dvojisko_drevo<int>> pot = new List<Dvojisko_drevo<int>>();
-            foreach (Dvojisko_drevo<int> drevo in drevesa)
+            List<DvojiskoDrevo<int>> pot = new List<DvojiskoDrevo<int>>();
+            foreach (DvojiskoDrevo<int> drevo in drevesa)
             {
                 PregledDrevesa(drevo, pot, "lkd");
             }
@@ -385,8 +388,8 @@ namespace Projekt
 
         private void ObratniPregledGumb_Click(object sender, EventArgs e)
         {
-            List<Dvojisko_drevo<int>> pot = new List<Dvojisko_drevo<int>>();
-            foreach (Dvojisko_drevo<int> drevo in drevesa)
+            List<DvojiskoDrevo<int>> pot = new List<DvojiskoDrevo<int>>();
+            foreach (DvojiskoDrevo<int> drevo in drevesa)
             {
                 PregledDrevesa(drevo, pot, "ldk");
             }
@@ -399,7 +402,7 @@ namespace Projekt
         /// <param name="vozlisce">Dvojiško drevo</param>
         /// <param name="pot">Pot vozlišè</param>
         /// <param name="vzorec">Vzorec po katerem bomo naredili pregled</param>
-        private void PregledDrevesa(Dvojisko_drevo<int> vozlisce, List<Dvojisko_drevo<int>> pot, string vzorec)
+        private void PregledDrevesa(DvojiskoDrevo<int> vozlisce, List<DvojiskoDrevo<int>> pot, string vzorec)
         {
             if (vozlisce == null || vozlisce.Prazno) return;
             foreach (char znak in vzorec)
