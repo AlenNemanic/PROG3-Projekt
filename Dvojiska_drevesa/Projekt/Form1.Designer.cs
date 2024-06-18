@@ -31,7 +31,6 @@
             this.radioButtonOdstrani = new System.Windows.Forms.RadioButton();
             this.radioButtonPremakni = new System.Windows.Forms.RadioButton();
             this.textBox = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
@@ -74,6 +73,7 @@
             this.IzvoziGumb.Size = new System.Drawing.Size(103, 30);
             this.IzvoziGumb.TabIndex = 3;
             this.IzvoziGumb.Text = "Izvozi";
+            this.IzvoziGumb.Click += new System.EventHandler(this.IzvoziGumb_Click);
             // 
             // UvoziGumb
             // 
@@ -83,6 +83,7 @@
             this.UvoziGumb.Size = new System.Drawing.Size(103, 30);
             this.UvoziGumb.TabIndex = 4;
             this.UvoziGumb.Text = "Uvozi";
+            this.UvoziGumb.Click += new System.EventHandler(this.UvoziGumb_Click);
             // 
             // pictureBox
             // 
@@ -157,20 +158,9 @@
             this.textBox.Size = new System.Drawing.Size(45, 21);
             this.textBox.TabIndex = 11;
             // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button1.Location = new System.Drawing.Point(541, 265);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(103, 30);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "Uvozi";
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1184, 561);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.UvoziGumb);
@@ -198,6 +188,5 @@
         private System.Windows.Forms.RadioButton radioButtonOdstrani;
         private System.Windows.Forms.RadioButton radioButtonPovezi;
         private System.Windows.Forms.TextBox textBox;
-        private System.Windows.Forms.Button button1;
     }
 }
