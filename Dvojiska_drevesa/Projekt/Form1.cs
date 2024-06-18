@@ -430,10 +430,10 @@ namespace Projekt
 
         private void ZapisiDrevoVDatoteko(DvojiskoDrevo drevo, string filePath)
         {
-            var slovar = drevo.IzDrevesaVSlovar();
+            Dictionary<string, int> slovar = drevo.IzDrevesaVSlovar();
             using (StreamWriter writer = new StreamWriter(filePath))
             {
-                foreach (var element in slovar)
+                foreach (KeyValuePair<string, int> element in slovar)
                 {
                     writer.WriteLine($"{element.Key}:{element.Value}");
                 }

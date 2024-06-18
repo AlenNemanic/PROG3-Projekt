@@ -7,7 +7,6 @@ namespace Projekt
     {
         private DvojiskoDrevo _levoPoddrevo;
         private DvojiskoDrevo _desnoPoddrevo;
-        private bool _prazno;
 
         public int Podatek { get; set; }
         public bool Prazno {get; set; }
@@ -65,14 +64,15 @@ namespace Projekt
             }
         }
 
-
         public bool Iskanje(int vrednost)
         {
             if (Prazno)
                 return false;
-            if (!Levo.Prazno && Levo.Iskanje(vrednost))
+            if (vrednost == Podatek)
                 return true;
-            if (!Desno.Prazno && Desno.Iskanje(vrednost))
+            if (Levo.Iskanje(vrednost))
+                return true;
+            if (Desno.Iskanje(vrednost))
                 return true;
             return false;
         }
@@ -133,10 +133,10 @@ namespace Projekt
 
         public static DvojiskoDrevo SestaviIzSlovarja(Dictionary<string, int> slovar)
         {
-            if (!slovar.TryGetValue("1", out int rootData))
+            if (!slovar.TryGetValue("1", out int vozlisce))
                 throw new Exception("Ne morem sestaviti drevesa: Koren '1' ni v slovarju.");
 
-            DvojiskoDrevo koren = new DvojiskoDrevo(rootData, identifikator: "1");
+            DvojiskoDrevo koren = new DvojiskoDrevo(vozlisce, identifikator: "1");
             Queue<DvojiskoDrevo> vrsta = new Queue<DvojiskoDrevo>();
             vrsta.Enqueue(koren);
 
@@ -145,15 +145,15 @@ namespace Projekt
                 DvojiskoDrevo trenutni = vrsta.Dequeue();
                 string id = trenutni.Identifikator;
 
-                if (slovar.TryGetValue(id + "L", out int leftData))
+                if (slovar.TryGetValue(id + "L", out int leviSin))
                 {
-                    trenutni.Levo = new DvojiskoDrevo(leftData, identifikator: id + "L");
+                    trenutni.Levo = new DvojiskoDrevo(leviSin, identifikator: id + "L");
                     vrsta.Enqueue(trenutni.Levo);
                 }
 
-                if (slovar.TryGetValue(id + "R", out int rightData))
+                if (slovar.TryGetValue(id + "R", out int desniSin))
                 {
-                    trenutni.Desno = new DvojiskoDrevo(rightData, identifikator: id + "R");
+                    trenutni.Desno = new DvojiskoDrevo(desniSin, identifikator: id + "R");
                     vrsta.Enqueue(trenutni.Desno);
                 }
             }
