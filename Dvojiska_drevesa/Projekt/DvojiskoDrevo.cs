@@ -64,6 +64,11 @@ namespace Projekt
             }
         }
 
+        /// <summary>
+        /// Preveri ali drevo vsebuje podatek.
+        /// </summary>
+        /// <param name="vrednost">Podatek, ki ga iščemo v drevesu</param>
+        /// <returns>Vrne true če drevo vsebuje podatek, false sicer.</returns>
         public bool Iskanje(int vrednost)
         {
             if (Prazno)
@@ -77,11 +82,25 @@ namespace Projekt
             return false;
         }
 
-        public static DvojiskoDrevo Sestavi(int podatekVKorenu, DvojiskoDrevo levoDrevo, DvojiskoDrevo desnoDrevo, string identifikator)
+        /// <summary>
+        /// Sestavi novo dvojiško drevo.
+        /// </summary>
+        /// <param name="podatek">Podatek v korenu</param>
+        /// <param name="levoDrevo">Levo poddrevo</param>
+        /// <param name="desnoDrevo">Desno poddrevo</param>
+        /// <param name="identifikator">Identifikator</param>
+        /// <returns>Vrne novo dvojiško drevo.</returns>
+        public static DvojiskoDrevo Sestavi(int podatek, DvojiskoDrevo levoDrevo, DvojiskoDrevo desnoDrevo, string identifikator)
         {
-            return new DvojiskoDrevo(podatekVKorenu, levoDrevo, desnoDrevo, identifikator);
+            return new DvojiskoDrevo(podatek, levoDrevo, desnoDrevo, identifikator);
         }
 
+        /// <summary>
+        /// Naredi obhod/pregled po drevesu. Možni vzorci so 'l', 'k' in 'd', ter vse njihove kombinacije.
+        /// </summary>
+        /// <param name="drevo">Dvojiško drevo</param>
+        /// <param name="vzorec">Vzorec po katerem naredimo obhod</param>
+        /// <returns>Vrne obhod drevesa</returns>
         public static string Obhod(DvojiskoDrevo drevo, string vzorec)
         {
             if (drevo == null)
@@ -121,6 +140,13 @@ namespace Projekt
             }
         }
 
+        /// <summary>
+        /// Iz tabele sestavi novo dvojiško drevo.
+        /// </summary>
+        /// <param name="tabela">Tabela podatkov vozlišč</param>
+        /// <param name="polozajKorena">Indeks korena v tabeli</param>
+        /// <param name="identifikator">Identifikator korena</param>
+        /// <returns>Vrne novo sestavljeno dvojiško drevo.</returns>
         public static DvojiskoDrevo SestaviIzTabele(int[] tabela, int polozajKorena = 1, string identifikator = "1")
         {
             if (polozajKorena >= tabela.Length || tabela[polozajKorena] == int.MinValue)
@@ -131,35 +157,10 @@ namespace Projekt
             return Sestavi(tabela[polozajKorena], levo, desno, identifikator);
         }
 
-        public static DvojiskoDrevo SestaviIzSlovarja(Dictionary<string, int> slovar)
-        {
-            if (!slovar.TryGetValue("1", out int vozlisce))
-                throw new Exception("Ne morem sestaviti drevesa: Koren '1' ni v slovarju.");
-
-            DvojiskoDrevo koren = new DvojiskoDrevo(vozlisce, identifikator: "1");
-            Queue<DvojiskoDrevo> vrsta = new Queue<DvojiskoDrevo>();
-            vrsta.Enqueue(koren);
-
-            while (vrsta.Count > 0)
-            {
-                DvojiskoDrevo trenutni = vrsta.Dequeue();
-                string id = trenutni.Identifikator;
-
-                if (slovar.TryGetValue(id + "L", out int leviSin))
-                {
-                    trenutni.Levo = new DvojiskoDrevo(leviSin, identifikator: id + "L");
-                    vrsta.Enqueue(trenutni.Levo);
-                }
-
-                if (slovar.TryGetValue(id + "R", out int desniSin))
-                {
-                    trenutni.Desno = new DvojiskoDrevo(desniSin, identifikator: id + "R");
-                    vrsta.Enqueue(trenutni.Desno);
-                }
-            }
-            return koren;
-        }
-
+        /// <summary>
+        /// Sestavi slovar iz drevesa.
+        /// </summary>
+        /// <returns>Vrne slovar, kjer so ključi identifikatorji in vrednosti so podatki vozlišč.</returns>
         public Dictionary<string, int> IzDrevesaVSlovar()
         {
             Dictionary<string, int> slovar = new Dictionary<string, int>();
@@ -167,6 +168,12 @@ namespace Projekt
             return slovar;
         }
 
+        /// <summary>
+        /// Sestavi slovar iz drevesa.
+        /// </summary>
+        /// <param name="vozlisce">Koren drevesa</param>
+        /// <param name="identifikator">Identifikator korena</param>
+        /// <param name="slovar">Slovar, kjer so ključi identifikatorji in vrednosti so podatki vozlišč</param>
         private void IzDrevesaVSlovar(DvojiskoDrevo vozlisce, string identifikator, Dictionary<string, int> slovar)
         {
             if (vozlisce == null || vozlisce.Prazno)
@@ -178,6 +185,11 @@ namespace Projekt
             IzDrevesaVSlovar(vozlisce.Desno, identifikator + "R", slovar);
         }
 
+        /// <summary>
+        /// Sestavi drevo iz slovarja.
+        /// </summary>
+        /// <param name="slovar">Slovar, kjer so ključi identifikatorji in vrednosti so podatki vozlišč</param>
+        /// <returns>Vrne novo sestavljeno dvojiško drevo.</returns>
         public static DvojiskoDrevo IzSlovarja(Dictionary<string, int> slovar)
         {
             if (!slovar.ContainsKey("1"))
@@ -188,6 +200,12 @@ namespace Projekt
             return koren;
         }
 
+        /// <summary>
+        /// Sestavi drevo iz slovarja.
+        /// </summary>
+        /// <param name="vozlisce">Koren drevesa</param>
+        /// <param name="identifikator">Identifkator korena</param>
+        /// <param name="slovar">Slovar, kjer so ključi identifikatorji in vrednosti so podatki vozlišč</param>
         private static void GradnjaIzSlovarja(DvojiskoDrevo vozlisce, string identifikator, Dictionary<string, int> slovar)
         {
             string levoId = identifikator + "L";

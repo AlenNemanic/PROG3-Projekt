@@ -8,17 +8,17 @@ namespace Projekt
 {
     public partial class Form1 : Form
     {
-        private List<DvojiskoDrevo> drevesa;
-        private Point? dragStart = null;
-        private DvojiskoDrevo draggedNode;
-        private PointF zacetnaPozicija;
-        private const float NodeSizeRatio = 20;
-        private PointF offset = new PointF(0f, 0f); // Offset to maintain the zoom center
-        private Timer casovnikPrehoda;
-        private List<DvojiskoDrevo> potPrehoda;
         private int trenutniIndeksPrehoda;
+        private const float NodeSizeRatio = 20;
+        private List<DvojiskoDrevo> drevesa;
+        private List<DvojiskoDrevo> potPrehoda;
+        private DvojiskoDrevo draggedNode;
         private DvojiskoDrevo izbranoVozlisce;
         private DvojiskoDrevo prvoIzbranoVozlisce = null; // First selected node for connecting
+        private PointF offset = new PointF(0f, 0f); // Offset to maintain the zoom center
+        private PointF zacetnaPozicija;
+        private Point? dragStart = null;
+        private Timer casovnikPrehoda;
 
         public Form1()
         {
@@ -68,6 +68,14 @@ namespace Projekt
             }
         }
 
+        /// <summary>
+        /// Nastavimo zaèetno pozicijo dreves.
+        /// </summary>
+        /// <param name="vozlisce">Vozlišèe</param>
+        /// <param name="x">X koordinata vozlišèa</param>
+        /// <param name="y">Y koordinata vozlišèa</param>
+        /// <param name="xOffset">Zamik v X koordinati</param>
+        /// <param name="yOffset">Zamik v Y koordinati</param>
         private void SetInitialPositions(DvojiskoDrevo vozlisce, float x, float y, float xOffset, float yOffset)
         {
             if (vozlisce == null || vozlisce.Prazno)
@@ -96,6 +104,10 @@ namespace Projekt
             }
         }
 
+        /// <summary>
+        /// Izriše drevo.
+        /// </summary>
+        /// <param name="vozlisce">Dvojiško drevo</param>
         private void DrawTree(Graphics g, DvojiskoDrevo vozlisce)
         {
             if (vozlisce == null || vozlisce.Prazno)
@@ -205,23 +217,28 @@ namespace Projekt
             }
         }
 
-        private void PoveziVozlisci(DvojiskoDrevo prvoVozlisce, DvojiskoDrevo drugoVozlisce)
+        /// <summary>
+        /// Poveže dva vozlišèa skupaj.
+        /// </summary>
+        /// <param name="prvo">Prvo vozlišèe</param>
+        /// <param name="drugo">Drugo vozlišèe</param>
+        private void PoveziVozlisci(DvojiskoDrevo prvo, DvojiskoDrevo drugo)
         {
             // Remove secondNode from its current tree
             foreach (DvojiskoDrevo drevo in drevesa)   // Gremo po vseh drevesih, dokler ne najdemo tistega, kjer se nahaja drugoVozlisce
             {
-                if (IzbrisiVozlisce(drevo, drugoVozlisce)) // Ko ga najdemo izbrišemo drugoVozlisce iz njega in konèamo zanko
+                if (IzbrisiVozlisce(drevo, drugo)) // Ko ga najdemo izbrišemo drugoVozlisce iz njega in konèamo zanko
                     break;
             }
 
             // Povežemo drugoVozlisce s prvoVozlisce
-            if (prvoVozlisce.Levo == null || prvoVozlisce.Levo.Prazno)
+            if (prvo.Levo == null || prvo.Levo.Prazno)
             {
-                prvoVozlisce.Levo = drugoVozlisce;
+                prvo.Levo = drugo;
             }
-            else if (prvoVozlisce.Desno == null || prvoVozlisce.Desno.Prazno)
+            else if (prvo.Desno == null || prvo.Desno.Prazno)
             {
-                prvoVozlisce.Desno = drugoVozlisce;
+                prvo.Desno = drugo;
             }
             else
             {
@@ -232,6 +249,12 @@ namespace Projekt
             Invalidate();
         }
 
+        /// <summary>
+        /// Izbriše vozlišèe, ter celotno levo in desno poddrevo.
+        /// </summary>
+        /// <param name="parent">Oèe vozlišèa</param>
+        /// <param name="nodeToRemove">Vozlišèe, ki ga želimo izbrisati</param>
+        /// <returns>Vrne true, èe se je vozlišèe izbrisalo, sicer vrne false.</returns>
         private bool IzbrisiVozlisce(DvojiskoDrevo parent, DvojiskoDrevo nodeToRemove)
         {
             if (parent == null || parent.Prazno)
@@ -274,6 +297,12 @@ namespace Projekt
             }
         }
 
+        /// <summary>
+        /// Poišèe vozlišèe, ki je najbližje toèki
+        /// </summary>
+        /// <param name="vozlisce">Dvojiško drevo</param>
+        /// <param name="lokacija">Toèka v ravnini</param>
+        /// <returns>Vrne vozlišèe, ki je najbližje toèki.</returns>
         private DvojiskoDrevo FindNodeAtPosition(DvojiskoDrevo vozlisce, Point lokacija)
         {
             if (vozlisce == null || vozlisce.Prazno)
@@ -402,6 +431,10 @@ namespace Projekt
             else MessageBox.Show("Ni dreves za izvoz.");
         }
 
+        /// <summary>
+        /// Prebere datoteko in naredi novo drevo.
+        /// </summary>
+        /// <param name="filePath">Pot kjer se nahaja tekstovna datoteka</param>
         private void PreberiDrevoIzDatoteke(string filePath)
         {
             Dictionary<string, int> slovar = new Dictionary<string, int>();
@@ -428,6 +461,11 @@ namespace Projekt
             Invalidate();
         }
 
+        /// <summary>
+        /// Drevo zapiše na datoteko.
+        /// </summary>
+        /// <param name="drevo">Koren drevesa</param>
+        /// <param name="filePath">Pot kjer se bo shranila tekstovna datoteka</param>
         private void ZapisiDrevoVDatoteko(DvojiskoDrevo drevo, string filePath)
         {
             Dictionary<string, int> slovar = drevo.IzDrevesaVSlovar();
