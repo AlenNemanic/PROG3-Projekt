@@ -19,6 +19,7 @@ namespace Projekt
         private PointF zacetnaPozicija;
         private Point? dragStart = null;
         private Timer casovnikPrehoda;
+        private ContextMenuStrip addNodeMenu; // Context menu for adding left or right child
 
         public Form1()
         {
@@ -30,6 +31,11 @@ namespace Projekt
             MouseDown += Form1_MouseDown;
             MouseMove += Form1_MouseMove;
             MouseUp += Form1_MouseUp;
+
+            // Initialize the context menu for adding nodes
+            addNodeMenu = new ContextMenuStrip();
+            addNodeMenu.Items.Add("Add Left", null, AddLeftNode_Click);
+            addNodeMenu.Items.Add("Add Right", null, AddRightNode_Click);
 
             // Enable double buffering to reduce flicker
             DoubleBuffered = true;
@@ -68,14 +74,6 @@ namespace Projekt
             }
         }
 
-        /// <summary>
-        /// Nastavimo zaèetno pozicijo dreves.
-        /// </summary>
-        /// <param name="vozlisce">Vozlišèe</param>
-        /// <param name="x">X koordinata vozlišèa</param>
-        /// <param name="y">Y koordinata vozlišèa</param>
-        /// <param name="xOffset">Zamik v X koordinati</param>
-        /// <param name="yOffset">Zamik v Y koordinati</param>
         private void SetInitialPositions(DvojiskoDrevo vozlisce, float x, float y, float xOffset, float yOffset)
         {
             if (vozlisce == null || vozlisce.Prazno)
@@ -104,10 +102,6 @@ namespace Projekt
             }
         }
 
-        /// <summary>
-        /// Izriše drevo.
-        /// </summary>
-        /// <param name="vozlisce">Dvojiško drevo</param>
         private void DrawTree(Graphics g, DvojiskoDrevo vozlisce)
         {
             if (vozlisce == null || vozlisce.Prazno)
@@ -119,7 +113,6 @@ namespace Projekt
             {
                 if (vozlisce.Levo != null && !vozlisce.Levo.Prazno)
                 {
-                    // Use red pen if the left child is the highlighted node
                     Pen pen = izbranoVozlisce == vozlisce.Levo ? Pens.Red : Pens.Black;
                     g.DrawLine(pen, vozlisce.PosX, vozlisce.PosY, vozlisce.Levo.PosX, vozlisce.Levo.PosY);
                     DrawTree(g, vozlisce.Levo);
@@ -127,18 +120,15 @@ namespace Projekt
 
                 if (vozlisce.Desno != null && !vozlisce.Desno.Prazno)
                 {
-                    // Use red pen if the right child is the highlighted node
                     Pen pen = izbranoVozlisce == vozlisce.Desno ? Pens.Red : Pens.Black;
                     g.DrawLine(pen, vozlisce.PosX, vozlisce.PosY, vozlisce.Desno.PosX, vozlisce.Desno.PosY);
                     DrawTree(g, vozlisce.Desno);
                 }
 
-                // Use orange brush if the current node is the highlighted node
                 Brush brush = izbranoVozlisce == vozlisce ? Brushes.Orange : Brushes.LightBlue;
                 g.FillEllipse(brush, vozlisce.PosX - velikostVozlisca / 2, vozlisce.PosY - velikostVozlisca / 2, velikostVozlisca, velikostVozlisca);
                 g.DrawEllipse(Pens.Black, vozlisce.PosX - velikostVozlisca / 2, vozlisce.PosY - velikostVozlisca / 2, velikostVozlisca, velikostVozlisca);
 
-                // Measure the size of the text to center it correctly
                 SizeF textSize = g.MeasureString(vozlisce.Podatek.ToString(), scaledFont);
                 float textX = vozlisce.PosX - textSize.Width / 2;
                 float textY = vozlisce.PosY - textSize.Height / 2;
@@ -149,13 +139,17 @@ namespace Projekt
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (radioButtonDodaj.Checked && int.TryParse(textBox.Text, out int vrednost))
+            if (radioButtonDodaj.Checked)
             {
-                int sirina = pictureBox.Width;
-                DvojiskoDrevo novoDrevo = new DvojiskoDrevo(vrednost);
-                drevesa.Add(novoDrevo);
-                SetInitialPositions(novoDrevo, e.Location.X, e.Location.Y, (Width - sirina) / 4, (Height - sirina) / 4);
-                Invalidate();
+                foreach (DvojiskoDrevo drevo in drevesa)
+                {
+                    izbranoVozlisce = FindNodeAtPosition(drevo, e.Location);
+                    if (izbranoVozlisce != null)
+                    {
+                        addNodeMenu.Show(this, e.Location);
+                        break;
+                    }
+                }
             }
             else if (radioButtonPremakni.Checked)
             {
@@ -166,7 +160,6 @@ namespace Projekt
                     {
                         dragStart = e.Location;
                         zacetnaPozicija = new PointF(draggedNode.PosX, draggedNode.PosY);
-                        // Provide visual feedback for the selected node
                         Cursor = Cursors.Hand;
                         break;
                     }
@@ -217,21 +210,50 @@ namespace Projekt
             }
         }
 
-        /// <summary>
-        /// Poveže dva vozlišèa skupaj.
-        /// </summary>
-        /// <param name="prvo">Prvo vozlišèe</param>
-        /// <param name="drugo">Drugo vozlišèe</param>
+        private void AddLeftNode_Click(object sender, EventArgs e)
+        {
+            if (izbranoVozlisce != null && int.TryParse(textBox.Text, out int vrednost))
+            {
+                if (izbranoVozlisce.Levo == null || izbranoVozlisce.Levo.Prazno)
+                {
+                    izbranoVozlisce.Levo = new DvojiskoDrevo(vrednost);
+                    InitializeTreePositions();
+                    izbranoVozlisce = null; // Reset the selected node to avoid coloring
+                    Invalidate();
+                }
+                else
+                {
+                    MessageBox.Show("The selected node already has a left child.");
+                }
+            }
+        }
+
+        private void AddRightNode_Click(object sender, EventArgs e)
+        {
+            if (izbranoVozlisce != null && int.TryParse(textBox.Text, out int vrednost))
+            {
+                if (izbranoVozlisce.Desno == null || izbranoVozlisce.Desno.Prazno)
+                {
+                    izbranoVozlisce.Desno = new DvojiskoDrevo(vrednost);
+                    InitializeTreePositions();
+                    izbranoVozlisce = null; // Reset the selected node to avoid coloring
+                    Invalidate();
+                }
+                else
+                {
+                    MessageBox.Show("The selected node already has a right child.");
+                }
+            }
+        }
+
         private void PoveziVozlisci(DvojiskoDrevo prvo, DvojiskoDrevo drugo)
         {
-            // Remove secondNode from its current tree
-            foreach (DvojiskoDrevo drevo in drevesa)   // Gremo po vseh drevesih, dokler ne najdemo tistega, kjer se nahaja drugoVozlisce
+            foreach (DvojiskoDrevo drevo in drevesa)
             {
-                if (IzbrisiVozlisce(drevo, drugo)) // Ko ga najdemo izbrišemo drugoVozlisce iz njega in konèamo zanko
+                if (IzbrisiVozlisce(drevo, drugo))
                     break;
             }
 
-            // Povežemo drugoVozlisce s prvoVozlisce
             if (prvo.Levo == null || prvo.Levo.Prazno)
             {
                 prvo.Levo = drugo;
@@ -249,12 +271,6 @@ namespace Projekt
             Invalidate();
         }
 
-        /// <summary>
-        /// Izbriše vozlišèe, ter celotno levo in desno poddrevo.
-        /// </summary>
-        /// <param name="parent">Oèe vozlišèa</param>
-        /// <param name="nodeToRemove">Vozlišèe, ki ga želimo izbrisati</param>
-        /// <returns>Vrne true, èe se je vozlišèe izbrisalo, sicer vrne false.</returns>
         private bool IzbrisiVozlisce(DvojiskoDrevo parent, DvojiskoDrevo nodeToRemove)
         {
             if (parent == null || parent.Prazno)
@@ -262,12 +278,12 @@ namespace Projekt
 
             if (parent.Levo == nodeToRemove)
             {
-                parent.Levo = null; // Remove the node
+                parent.Levo = null;
                 return true;
             }
             else if (parent.Desno == nodeToRemove)
             {
-                parent.Desno = null; // Remove the node
+                parent.Desno = null;
                 return true;
             }
 
@@ -291,18 +307,11 @@ namespace Projekt
             if (dragStart.HasValue && draggedNode != null)
             {
                 draggedNode = null;
-                // Reset the cursor after dragging
                 Cursor = Cursors.Default;
                 Invalidate();
             }
         }
 
-        /// <summary>
-        /// Poišèe vozlišèe, ki je najbližje toèki
-        /// </summary>
-        /// <param name="vozlisce">Dvojiško drevo</param>
-        /// <param name="lokacija">Toèka v ravnini</param>
-        /// <returns>Vrne vozlišèe, ki je najbližje toèki.</returns>
         private DvojiskoDrevo FindNodeAtPosition(DvojiskoDrevo vozlisce, Point lokacija)
         {
             if (vozlisce == null || vozlisce.Prazno)
@@ -378,12 +387,6 @@ namespace Projekt
             ZacniPrehod(pot);
         }
 
-        /// <summary>
-        /// Metoda za pregled drevesa. Dovoljeni znaki so 'l', 'k' in 'd'.
-        /// </summary>
-        /// <param name="vozlisce">Dvojiško drevo</param>
-        /// <param name="pot">Pot vozlišè</param>
-        /// <param name="vzorec">Vzorec po katerem bomo naredili pregled</param>
         private void PregledDrevesa(DvojiskoDrevo vozlisce, List<DvojiskoDrevo> pot, string vzorec)
         {
             if (vozlisce == null || vozlisce.Prazno) return;
@@ -431,10 +434,6 @@ namespace Projekt
             else MessageBox.Show("Ni dreves za izvoz.");
         }
 
-        /// <summary>
-        /// Prebere datoteko in naredi novo drevo.
-        /// </summary>
-        /// <param name="filePath">Pot kjer se nahaja tekstovna datoteka</param>
         private void PreberiDrevoIzDatoteke(string filePath)
         {
             Dictionary<string, int> slovar = new Dictionary<string, int>();
@@ -453,19 +452,13 @@ namespace Projekt
 
             DvojiskoDrevo novoDrevo = DvojiskoDrevo.IzSlovarja(slovar);
 
-            // Poèisti seznam dreves preden dodamo novo drevo
             drevesa.Clear();
             drevesa.Add(novoDrevo);
 
-            InitializeTreePositions(); // Recalculate positions
+            InitializeTreePositions();
             Invalidate();
         }
 
-        /// <summary>
-        /// Drevo zapiše na datoteko.
-        /// </summary>
-        /// <param name="drevo">Koren drevesa</param>
-        /// <param name="filePath">Pot kjer se bo shranila tekstovna datoteka</param>
         private void ZapisiDrevoVDatoteko(DvojiskoDrevo drevo, string filePath)
         {
             Dictionary<string, int> slovar = drevo.IzDrevesaVSlovar();

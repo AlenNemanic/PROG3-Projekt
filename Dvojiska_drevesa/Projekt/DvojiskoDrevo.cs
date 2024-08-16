@@ -209,7 +209,7 @@ namespace Projekt
         private static void GradnjaIzSlovarja(DvojiskoDrevo vozlisce, string identifikator, Dictionary<string, int> slovar)
         {
             string levoId = identifikator + "L";
-            string desnoId = identifikator + "R";
+            string desnoId = identifikator + "R";   
 
             if (slovar.ContainsKey(levoId))
             {
