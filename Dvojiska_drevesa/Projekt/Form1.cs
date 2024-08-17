@@ -147,6 +147,8 @@ namespace Projekt
                 // Se izvede v primeru, da smo zbrisali celotno drevo oziroma drevesa sploh ni. Dodamo koren brez sinov.
                 if (drevesa.Count == 0 && int.TryParse(textBox.Text, out int vrednost))
                 {
+                    // dodamo stanje pred novo operacijo
+                    //Stanje(drevo);
                     DvojiskoDrevo novoDrevo = new DvojiskoDrevo(vrednost);
                     drevesa.Add(novoDrevo);
                     // Set initial position for the root node
@@ -402,7 +404,16 @@ namespace Projekt
             try
             {
                 Dictionary<string, int> stanje = prejsnja_stanja.Pop();
-                naslednja_stanja.Push(drevesa[0].IzDrevesaVSlovar());
+                // ce smo izbrisali celotno drevo
+                if (drevesa.Count == 0)
+                {
+                    DvojiskoDrevo praznoDrevo = new DvojiskoDrevo(); // prazno dvojisko drevo
+                    naslednja_stanja.Push(praznoDrevo.IzDrevesaVSlovar());
+                }
+                // ce smo naredili operacijo na drevesu in drevo še vedno obstaja
+                else { 
+                    naslednja_stanja.Push(drevesa[0].IzDrevesaVSlovar());
+                }
                 drevesa.Clear();
                 drevesa.Add(DvojiskoDrevo.IzSlovarja(stanje));
             }
