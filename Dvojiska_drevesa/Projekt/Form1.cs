@@ -144,7 +144,18 @@ namespace Projekt
         {
             if (radioButtonDodaj.Checked)
             {
-                foreach (DvojiskoDrevo drevo in drevesa)
+                // Se izvede v primeru, da smo zbrisali celotno drevo oziroma drevesa sploh ni. Dodamo koren brez sinov.
+                if (drevesa.Count == 0 && int.TryParse(textBox.Text, out int vrednost))
+                {
+                    DvojiskoDrevo novoDrevo = new DvojiskoDrevo(vrednost);
+                    drevesa.Add(novoDrevo);
+                    // Set initial position for the root node
+                    InitializeTreePositions();
+                    Invalidate();
+                }
+                // v primeru, da je drevo obstajalo, zbrišemo tisto na katero smo kliknili
+                else {  
+                    foreach (DvojiskoDrevo drevo in drevesa)
                 {
                     izbranoVozlisce = FindNodeAtPosition(drevo, e.Location);
                     if (izbranoVozlisce != null)
@@ -152,6 +163,7 @@ namespace Projekt
                         Stanje(drevo);
                         addNodeMenu.Show(this, e.Location);                        break;
                     }
+                }
                 }
             }
             else if (radioButtonOdstrani.Checked)
