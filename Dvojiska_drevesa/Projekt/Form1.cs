@@ -1,20 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Projekt
 {
-    public partial class Form1 : Form
+    public partial class Form1: Form
     {
         private int trenutniIndeksPrehoda;
         private const float NodeSizeRatio = 20;
         private List<DvojiskoDrevo> drevesa;
         private List<DvojiskoDrevo> potPrehoda;
+        private Stack<Dictionary<string, int>> prejsnja_stanja = new Stack<Dictionary<string, int>>();
+        private Stack<Dictionary<string, int>> naslednja_stanja = new Stack<Dictionary<string, int>>();
         private DvojiskoDrevo draggedNode;
         private DvojiskoDrevo izbranoVozlisce;
-        private DvojiskoDrevo prvoIzbranoVozlisce = null; // First selected node for connecting
         private PointF offset = new PointF(0f, 0f); // Offset to maintain the zoom center
         private PointF zacetnaPozicija;
         private Point? dragStart = null;
@@ -146,22 +149,8 @@ namespace Projekt
                     izbranoVozlisce = FindNodeAtPosition(drevo, e.Location);
                     if (izbranoVozlisce != null)
                     {
-                        addNodeMenu.Show(this, e.Location);
-                        break;
-                    }
-                }
-            }
-            else if (radioButtonPremakni.Checked)
-            {
-                foreach (DvojiskoDrevo drevo in drevesa)
-                {
-                    draggedNode = FindNodeAtPosition(drevo, e.Location);
-                    if (draggedNode != null)
-                    {
-                        dragStart = e.Location;
-                        zacetnaPozicija = new PointF(draggedNode.PosX, draggedNode.PosY);
-                        Cursor = Cursors.Hand;
-                        break;
+                        Stanje(drevo);
+                        addNodeMenu.Show(this, e.Location);                        break;
                     }
                 }
             }
@@ -174,6 +163,7 @@ namespace Projekt
                         DvojiskoDrevo nodeToRemove = FindNodeAtPosition(drevo, e.Location);
                         if (nodeToRemove != null)
                         {
+                            Stanje(drevo);
                             if (drevo == nodeToRemove)
                             {
                                 drevesa.Remove(drevo);
@@ -188,26 +178,12 @@ namespace Projekt
                     }
                 }
             }
-            else if (radioButtonPovezi.Checked)
-            {
-                foreach (DvojiskoDrevo drevo in drevesa)
-                {
-                    DvojiskoDrevo selectedNode = FindNodeAtPosition(drevo, e.Location);
-                    if (selectedNode != null)
-                    {
-                        if (prvoIzbranoVozlisce == null)
-                        {
-                            prvoIzbranoVozlisce = selectedNode;
-                        }
-                        else
-                        {
-                            PoveziVozlisci(prvoIzbranoVozlisce, selectedNode);
-                            prvoIzbranoVozlisce = null;
-                        }
-                        break;
-                    }
-                }
-            }
+        }
+
+        private void Stanje(DvojiskoDrevo drevo)
+        {
+            prejsnja_stanja.Push(drevo.IzDrevesaVSlovar());
+            naslednja_stanja.Clear();
         }
 
         private void AddLeftNode_Click(object sender, EventArgs e)
@@ -244,31 +220,6 @@ namespace Projekt
                     MessageBox.Show("The selected node already has a right child.");
                 }
             }
-        }
-
-        private void PoveziVozlisci(DvojiskoDrevo prvo, DvojiskoDrevo drugo)
-        {
-            foreach (DvojiskoDrevo drevo in drevesa)
-            {
-                if (IzbrisiVozlisce(drevo, drugo))
-                    break;
-            }
-
-            if (prvo.Levo == null || prvo.Levo.Prazno)
-            {
-                prvo.Levo = drugo;
-            }
-            else if (prvo.Desno == null || prvo.Desno.Prazno)
-            {
-                prvo.Desno = drugo;
-            }
-            else
-            {
-                MessageBox.Show("The selected node already has two children.");
-                return;
-            }
-
-            Invalidate();
         }
 
         private bool IzbrisiVozlisce(DvojiskoDrevo parent, DvojiskoDrevo nodeToRemove)
@@ -434,6 +385,40 @@ namespace Projekt
             else MessageBox.Show("Ni dreves za izvoz.");
         }
 
+        private void RazveljaviGumb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<string, int> stanje = prejsnja_stanja.Pop();
+                naslednja_stanja.Push(drevesa[0].IzDrevesaVSlovar());
+                drevesa.Clear();
+                drevesa.Add(DvojiskoDrevo.IzSlovarja(stanje));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Prejšnje stanje ne obstaja!");
+            }
+            InitializeTreePositions();
+            Invalidate();
+        }
+
+        private void ObnoviGumb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<string, int> stanje = naslednja_stanja.Pop();
+                prejsnja_stanja.Push(drevesa[0].IzDrevesaVSlovar());
+                drevesa.Clear();
+                drevesa.Add(DvojiskoDrevo.IzSlovarja(stanje));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Naslednje stanje ne obstaja!");
+            }
+            InitializeTreePositions();
+            Invalidate();
+        }
+
         private void PreberiDrevoIzDatoteke(string filePath)
         {
             Dictionary<string, int> slovar = new Dictionary<string, int>();
@@ -454,7 +439,7 @@ namespace Projekt
 
             drevesa.Clear();
             drevesa.Add(novoDrevo);
-
+            prejsnja_stanja.Push(novoDrevo.IzDrevesaVSlovar());
             InitializeTreePositions();
             Invalidate();
         }

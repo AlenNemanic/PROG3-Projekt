@@ -27,10 +27,10 @@
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.radioButtonDodaj = new System.Windows.Forms.RadioButton();
             this.groupBox = new System.Windows.Forms.GroupBox();
-            this.radioButtonPovezi = new System.Windows.Forms.RadioButton();
             this.radioButtonOdstrani = new System.Windows.Forms.RadioButton();
-            this.radioButtonPremakni = new System.Windows.Forms.RadioButton();
             this.textBox = new System.Windows.Forms.TextBox();
+            this.RazveljaviGumb = new System.Windows.Forms.Button();
+            this.ObnoviGumb = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
@@ -38,7 +38,7 @@
             // PremiPregledGumb
             // 
             this.PremiPregledGumb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.PremiPregledGumb.Location = new System.Drawing.Point(15, 102);
+            this.PremiPregledGumb.Location = new System.Drawing.Point(15, 68);
             this.PremiPregledGumb.Name = "PremiPregledGumb";
             this.PremiPregledGumb.Size = new System.Drawing.Size(103, 30);
             this.PremiPregledGumb.TabIndex = 0;
@@ -48,7 +48,7 @@
             // VmesniPregledGumb
             // 
             this.VmesniPregledGumb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.VmesniPregledGumb.Location = new System.Drawing.Point(121, 102);
+            this.VmesniPregledGumb.Location = new System.Drawing.Point(121, 68);
             this.VmesniPregledGumb.Name = "VmesniPregledGumb";
             this.VmesniPregledGumb.Size = new System.Drawing.Size(103, 30);
             this.VmesniPregledGumb.TabIndex = 1;
@@ -58,7 +58,7 @@
             // ObratniPregledGumb
             // 
             this.ObratniPregledGumb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.ObratniPregledGumb.Location = new System.Drawing.Point(227, 102);
+            this.ObratniPregledGumb.Location = new System.Drawing.Point(227, 68);
             this.ObratniPregledGumb.Name = "ObratniPregledGumb";
             this.ObratniPregledGumb.Size = new System.Drawing.Size(103, 30);
             this.ObratniPregledGumb.TabIndex = 2;
@@ -89,7 +89,7 @@
             // 
             this.pictureBox.Location = new System.Drawing.Point(12, 12);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(350, 500);
+            this.pictureBox.Size = new System.Drawing.Size(327, 208);
             this.pictureBox.TabIndex = 5;
             this.pictureBox.TabStop = false;
             // 
@@ -106,32 +106,19 @@
             // 
             // groupBox
             // 
-            this.groupBox.Controls.Add(this.radioButtonPovezi);
             this.groupBox.Controls.Add(this.radioButtonOdstrani);
-            this.groupBox.Controls.Add(this.radioButtonPremakni);
             this.groupBox.Controls.Add(this.radioButtonDodaj);
             this.groupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox.Location = new System.Drawing.Point(15, 138);
+            this.groupBox.Location = new System.Drawing.Point(15, 104);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(92, 124);
+            this.groupBox.Size = new System.Drawing.Size(92, 73);
             this.groupBox.TabIndex = 10;
             this.groupBox.TabStop = false;
-            // 
-            // radioButtonPovezi
-            // 
-            this.radioButtonPovezi.AutoSize = true;
-            this.radioButtonPovezi.Location = new System.Drawing.Point(6, 94);
-            this.radioButtonPovezi.Name = "radioButtonPovezi";
-            this.radioButtonPovezi.Size = new System.Drawing.Size(61, 19);
-            this.radioButtonPovezi.TabIndex = 13;
-            this.radioButtonPovezi.TabStop = true;
-            this.radioButtonPovezi.Text = "Poveži";
-            this.radioButtonPovezi.UseVisualStyleBackColor = true;
             // 
             // radioButtonOdstrani
             // 
             this.radioButtonOdstrani.AutoSize = true;
-            this.radioButtonOdstrani.Location = new System.Drawing.Point(6, 69);
+            this.radioButtonOdstrani.Location = new System.Drawing.Point(6, 44);
             this.radioButtonOdstrani.Name = "radioButtonOdstrani";
             this.radioButtonOdstrani.Size = new System.Drawing.Size(71, 19);
             this.radioButtonOdstrani.TabIndex = 12;
@@ -139,28 +126,39 @@
             this.radioButtonOdstrani.Text = "Odstrani";
             this.radioButtonOdstrani.UseVisualStyleBackColor = true;
             // 
-            // radioButtonPremakni
-            // 
-            this.radioButtonPremakni.AutoSize = true;
-            this.radioButtonPremakni.Location = new System.Drawing.Point(6, 44);
-            this.radioButtonPremakni.Name = "radioButtonPremakni";
-            this.radioButtonPremakni.Size = new System.Drawing.Size(78, 19);
-            this.radioButtonPremakni.TabIndex = 10;
-            this.radioButtonPremakni.TabStop = true;
-            this.radioButtonPremakni.Text = "Premakni";
-            this.radioButtonPremakni.UseVisualStyleBackColor = true;
-            // 
             // textBox
             // 
             this.textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBox.Location = new System.Drawing.Point(113, 158);
+            this.textBox.Location = new System.Drawing.Point(113, 124);
             this.textBox.Name = "textBox";
             this.textBox.Size = new System.Drawing.Size(45, 21);
             this.textBox.TabIndex = 11;
             // 
+            // RazveljaviGumb
+            // 
+            this.RazveljaviGumb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.RazveljaviGumb.Location = new System.Drawing.Point(15, 183);
+            this.RazveljaviGumb.Name = "RazveljaviGumb";
+            this.RazveljaviGumb.Size = new System.Drawing.Size(103, 30);
+            this.RazveljaviGumb.TabIndex = 12;
+            this.RazveljaviGumb.Text = "Razveljavi";
+            this.RazveljaviGumb.Click += new System.EventHandler(this.RazveljaviGumb_Click);
+            // 
+            // ObnoviGumb
+            // 
+            this.ObnoviGumb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ObnoviGumb.Location = new System.Drawing.Point(124, 183);
+            this.ObnoviGumb.Name = "ObnoviGumb";
+            this.ObnoviGumb.Size = new System.Drawing.Size(103, 30);
+            this.ObnoviGumb.TabIndex = 13;
+            this.ObnoviGumb.Text = "Obnovi";
+            this.ObnoviGumb.Click += new System.EventHandler(this.ObnoviGumb_Click);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1184, 561);
+            this.Controls.Add(this.ObnoviGumb);
+            this.Controls.Add(this.RazveljaviGumb);
             this.Controls.Add(this.textBox);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.UvoziGumb);
@@ -184,9 +182,9 @@
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.RadioButton radioButtonDodaj;
         private System.Windows.Forms.GroupBox groupBox;
-        private System.Windows.Forms.RadioButton radioButtonPremakni;
         private System.Windows.Forms.RadioButton radioButtonOdstrani;
-        private System.Windows.Forms.RadioButton radioButtonPovezi;
         private System.Windows.Forms.TextBox textBox;
+        private System.Windows.Forms.Button RazveljaviGumb;
+        private System.Windows.Forms.Button ObnoviGumb;
     }
 }
