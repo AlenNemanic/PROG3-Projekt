@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Projekt
 {
     public class DvojiskoDrevo
     {
+        private int _podatek;
         private DvojiskoDrevo _levoPoddrevo;
         private DvojiskoDrevo _desnoPoddrevo;
 
-        public int Podatek { get; set; }
-        public bool Prazno {get; set; }
+        public bool Prazno { get; set; }
         public string Identifikator { get; set; }
         public float PosX { get; set; }
         public float PosY { get; set; }
@@ -32,6 +31,17 @@ namespace Projekt
             Identifikator = identifikator;
         }
 
+        public int Podatek
+        {
+            get { return _podatek; }
+            set
+            {
+                if (value == int.MinValue)
+                    Prazno = true;
+                _podatek = value;
+            }
+        }
+
         public DvojiskoDrevo Levo
         {
             get { return _levoPoddrevo; }
@@ -43,8 +53,7 @@ namespace Projekt
                     if (_levoPoddrevo != null)
                         _levoPoddrevo.Identifikator = Identifikator + "L";
                 }
-                else
-                    _levoPoddrevo = null;
+                else _levoPoddrevo = null;
             }
         }
 
@@ -59,102 +68,8 @@ namespace Projekt
                     if (_desnoPoddrevo != null)
                         _desnoPoddrevo.Identifikator = Identifikator + "D";
                 }
-                else
-                    _desnoPoddrevo = null;
+                else _desnoPoddrevo = null;
             }
-        }
-
-        /// <summary>
-        /// Preveri ali drevo vsebuje podatek.
-        /// </summary>
-        /// <param name="vrednost">Podatek, ki ga iščemo v drevesu</param>
-        /// <returns>Vrne true če drevo vsebuje podatek, false sicer.</returns>
-        public bool Iskanje(int vrednost)
-        {
-            if (Prazno)
-                return false;
-            if (vrednost == Podatek)
-                return true;
-            if (Levo.Iskanje(vrednost))
-                return true;
-            if (Desno.Iskanje(vrednost))
-                return true;
-            return false;
-        }
-
-        /// <summary>
-        /// Sestavi novo dvojiško drevo.
-        /// </summary>
-        /// <param name="podatek">Podatek v korenu</param>
-        /// <param name="levoDrevo">Levo poddrevo</param>
-        /// <param name="desnoDrevo">Desno poddrevo</param>
-        /// <param name="identifikator">Identifikator</param>
-        /// <returns>Vrne novo dvojiško drevo.</returns>
-        public static DvojiskoDrevo Sestavi(int podatek, DvojiskoDrevo levoDrevo, DvojiskoDrevo desnoDrevo, string identifikator)
-        {
-            return new DvojiskoDrevo(podatek, levoDrevo, desnoDrevo, identifikator);
-        }
-
-        /// <summary>
-        /// Naredi obhod/pregled po drevesu. Možni vzorci so 'l', 'k' in 'd', ter vse njihove kombinacije.
-        /// </summary>
-        /// <param name="drevo">Dvojiško drevo</param>
-        /// <param name="vzorec">Vzorec po katerem naredimo obhod</param>
-        /// <returns>Vrne obhod drevesa</returns>
-        public static string Obhod(DvojiskoDrevo drevo, string vzorec)
-        {
-            if (drevo == null)
-                return "";
-
-            var vrni = new System.Text.StringBuilder();
-            foreach (char znak in vzorec)
-            {
-                switch (znak)
-                {
-                    case 'l':
-                        vrni.Append(Obhod(drevo.Levo, vzorec));
-                        break;
-                    case 'd':
-                        vrni.Append(Obhod(drevo.Desno, vzorec));
-                        break;
-                    case 'k':
-                        vrni.Append($"{drevo.Identifikator}:{drevo.Podatek},");
-                        break;
-                    default:
-                        throw new Exception($"Napačen znak v obhodu ({znak}). Dovoljeni znaki so 'd', 'k' in 'l'.");
-                }
-            }
-            return vrni.ToString();
-        }
-
-        public override string ToString()
-        {
-            try
-            {
-                string izpis = Obhod(this, "lkd");
-                return "[" + izpis.TrimEnd(',') + "]";
-            }
-            catch (Exception)
-            {
-                return "Interna napaka";
-            }
-        }
-
-        /// <summary>
-        /// Iz tabele sestavi novo dvojiško drevo.
-        /// </summary>
-        /// <param name="tabela">Tabela podatkov vozlišč</param>
-        /// <param name="polozajKorena">Indeks korena v tabeli</param>
-        /// <param name="identifikator">Identifikator korena</param>
-        /// <returns>Vrne novo sestavljeno dvojiško drevo.</returns>
-        public static DvojiskoDrevo SestaviIzTabele(int[] tabela, int polozajKorena = 1, string identifikator = "1")
-        {
-            if (polozajKorena >= tabela.Length || tabela[polozajKorena] == int.MinValue)
-                return new DvojiskoDrevo();
-
-            DvojiskoDrevo levo = SestaviIzTabele(tabela, 2 * polozajKorena, identifikator + "L");
-            DvojiskoDrevo desno = SestaviIzTabele(tabela, 2 * polozajKorena + 1, identifikator + "R");
-            return Sestavi(tabela[polozajKorena], levo, desno, identifikator);
         }
 
         /// <summary>
@@ -209,7 +124,7 @@ namespace Projekt
         private static void GradnjaIzSlovarja(DvojiskoDrevo vozlisce, string identifikator, Dictionary<string, int> slovar)
         {
             string levoId = identifikator + "L";
-            string desnoId = identifikator + "R";   
+            string desnoId = identifikator + "R";
 
             if (slovar.ContainsKey(levoId))
             {

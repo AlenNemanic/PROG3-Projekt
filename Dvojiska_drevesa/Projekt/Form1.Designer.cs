@@ -169,6 +169,8 @@
             this.Controls.Add(this.pictureBox);
             this.Name = "Form1";
             this.Text = "Binary Tree Visualization";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
