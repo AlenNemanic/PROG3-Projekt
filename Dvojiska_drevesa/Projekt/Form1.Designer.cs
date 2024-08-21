@@ -176,7 +176,7 @@
             // 
             // Form1
             // 
-            this.ClientSize = new System.Drawing.Size(1184, 561);
+            this.ClientSize = new System.Drawing.Size(1484, 761);
             this.Controls.Add(this.GumbPoisci);
             this.Controls.Add(this.textBoxPoisci);
             this.Controls.Add(this.ObnoviGumb);

@@ -9,7 +9,7 @@ namespace Projekt
     public partial class Form1: Form
     {
         private int trenutniIndeksPrehoda;
-        private const float velikostVozlisca = 20;
+        private const float velikostVozlisca = 15;
         private DvojiskoDrevo drevo = new DvojiskoDrevo();
         private DvojiskoDrevo izbranoVozlisce;
         private List<DvojiskoDrevo> potPrehoda;
