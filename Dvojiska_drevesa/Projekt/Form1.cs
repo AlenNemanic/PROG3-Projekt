@@ -142,10 +142,10 @@ namespace Projekt
         /// </summary>
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (radioButtonDodaj.Checked)
+            if (radioGumbDodaj.Checked)
             {
                 // Izvede se, kadar drevo še nima korena. Dodamo koren brez sinov.
-                if (drevo.Prazno && int.TryParse(textBox.Text, out int vrednost))
+                if (drevo.Prazno && int.TryParse(textBoxDodaj.Text, out int vrednost))
                 {
                     DvojiskoDrevo novoDrevo = new DvojiskoDrevo(vrednost);
                     Stanje(drevo);
@@ -160,7 +160,7 @@ namespace Projekt
                         meniDodajanja.Show(this, e.Location);
                 }
             }
-            else if (radioButtonOdstrani.Checked)
+            else if (radioGumbOdstrani.Checked)
             {
                 DvojiskoDrevo vozlisceZaOdstranit = NajdiVozlisce(drevo, e.Location);
                 if (vozlisceZaOdstranit != null)
@@ -187,7 +187,7 @@ namespace Projekt
         /// </summary>
         private void DodajLevegaSina_Click(object sender, EventArgs e)
         {
-            if (izbranoVozlisce != null && int.TryParse(textBox.Text, out int vrednost))
+            if (izbranoVozlisce != null && int.TryParse(textBoxDodaj.Text, out int vrednost))
             {
                 if (izbranoVozlisce.Levo == null || izbranoVozlisce.Levo.Prazno)
                 {
@@ -206,7 +206,7 @@ namespace Projekt
         /// </summary>
         private void DodajDesnegaSina_Click(object sender, EventArgs e)
         {
-            if (izbranoVozlisce != null && int.TryParse(textBox.Text, out int vrednost))
+            if (izbranoVozlisce != null && int.TryParse(textBoxDodaj.Text, out int vrednost))
             {
                 if (izbranoVozlisce.Desno == null || izbranoVozlisce.Desno.Prazno)
                 {
@@ -239,6 +239,36 @@ namespace Projekt
                 IzbrisiVozlisce(vozlisce.Levo, vozlisceZaOdstranit);
                 IzbrisiVozlisce(vozlisce.Desno, vozlisceZaOdstranit);
             }
+        }
+
+        /// <summary>
+        /// Funkcija preveri vneseni podatek v drevesu. Èe je podatek najden, se prikaže ustrezno sporoèilo.
+        /// </summary>
+        private void GumbPoisci_Click(object sender, EventArgs e)
+        {
+            if (drevo != null && !drevo.Prazno && int.TryParse(textBoxPoisci.Text, out int vrednost))
+            {
+                if (PoisciPodatek(drevo, vrednost))
+                    MessageBox.Show($"Podatek {vrednost} je v drevesu.");
+                else MessageBox.Show($"Podatka {vrednost} ni v drevesu.");
+            }
+        }
+
+        /// <summary>
+        /// Rekurzivna funkcija za iskanje podatka v dvojiškem drevesu. 
+        /// Funkcija preveri, ali vozlišèe vsebuje iskani podatek, 
+        /// in èe ne, nadaljuje iskanje v levem in desnem poddrevesu.
+        /// </summary>
+        /// <param name="vozlisce">Trenutno vozlišèe, v katerem se išèe podatek.</param>
+        /// <param name="podatek">Vrednost, ki jo išèemo v drevesu.</param>
+        /// <returns>Vrne true, èe je podatek najden v drevesu; sicer vrne false.</returns>
+        private bool PoisciPodatek(DvojiskoDrevo vozlisce, int podatek)
+        {
+            if (vozlisce == null || vozlisce.Prazno)
+                return false;
+            if (vozlisce.Podatek == podatek)
+                return true;
+            return PoisciPodatek(vozlisce.Levo, podatek) || PoisciPodatek(vozlisce.Desno, podatek);
         }
 
         /// <summary>
